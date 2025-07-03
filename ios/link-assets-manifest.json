@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/MacPawFixelDisplay-Bold.otf",
+      "sha1": "b9d97ffcc482f6575107271f7a40110f70c28ddf"
+    },
+    {
+      "path": "src/assets/fonts/MacPawFixelDisplay-Medium.otf",
+      "sha1": "120507b47b8c072ed416634e6b50db82fb3379f3"
+    },
+    {
+      "path": "src/assets/fonts/MacPawFixelDisplay-Regular.otf",
+      "sha1": "a48d5d14ed58edff5ebca3872d1ec64d939c4055"
+    },
+    {
+      "path": "src/assets/fonts/MacPawFixelDisplay-SemiBold.otf",
+      "sha1": "af378d3df2c8334d53d03f3868041dfcbd0bfea0"
+    }
+  ]
+}
