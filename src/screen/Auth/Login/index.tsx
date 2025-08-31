@@ -6,7 +6,7 @@ import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {LoginSchema} from '../utils/validations';
 import {loginUser} from '../../../api/auth';
-import AuthHeader from '../components/AuthHeader';
+// import AuthHeader from '../components/AuthHeader';
 
 interface ITouched {
   email: boolean;
@@ -36,64 +36,67 @@ export default function LoginPage() {
   return (
     <AuthLayout>
       {/* <AuthHeader /> */}
-      <Text style={styles.title}>Login</Text>
-      <Text style={styles.text}>
-        Please enter your login details to continue using our service:
-      </Text>
-      <Formik<ILoginForm>
-        initialValues={{
-          email: '',
-          password: '',
-        }}
-        onSubmit={value => {
-          onLogin(value.email, value.password);
-        }}
-        validationSchema={LoginSchema()}>
-        {({
-          values,
-          setFieldValue,
-          handleSubmit,
-          isValid,
-          errors,
-        }: FormikValues) => (
-          <>
-            <View>
-              <Input
-                onFocus={() =>
-                  setTouched(prevState => ({...prevState, email: true}))
-                }
-                value={values.email}
-                placeholder={'Email'}
-                onChangeText={value => {
-                  setFieldValue('email', value);
-                }}
-                error={touched.email && errors.email}
-              />
-              <Input
-                onFocus={() =>
-                  setTouched(prevState => ({...prevState, password: true}))
-                }
-                value={values.password}
-                placeholder={'Password'}
-                onChangeText={value => {
-                  setFieldValue('password', value);
-                }}
-                error={touched.password && errors.password}
-                secureTextEntry={true}
-              />
-              <TouchableOpacity
-                onPress={handleSubmit}
-                style={styles.btn}
-                disabled={!isValid || !values.email || !values.password}>
-                <Text style={styles.btnText}>Login</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </Formik>
-      <TouchableOpacity onPress={() => {}} style={styles.link}>
-        <Text style={styles.linkText}>Register</Text>
-      </TouchableOpacity>
+      <View style={styles.wrapperLoginForm}>
+        <Text style={styles.title}>Login</Text>
+        <Text style={styles.text}>
+          Please enter your login details to continue using our service:
+        </Text>
+        <Formik<ILoginForm>
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          onSubmit={value => {
+            onLogin(value.email, value.password);
+          }}
+          validationSchema={LoginSchema()}
+          validateOnChange={true}>
+          {({
+            values,
+            setFieldValue,
+            handleSubmit,
+            isValid,
+            errors,
+          }: FormikValues) => (
+            <>
+              <View>
+                <Input
+                  onFocus={() =>
+                    setTouched(prevState => ({...prevState, email: true}))
+                  }
+                  value={values.email}
+                  placeholder={'Email'}
+                  onChangeText={value => {
+                    setFieldValue('email', value);
+                  }}
+                  error={touched.email && errors.email}
+                />
+                <Input
+                  onFocus={() =>
+                    setTouched(prevState => ({...prevState, password: true}))
+                  }
+                  value={values.password}
+                  placeholder={'Password'}
+                  onChangeText={value => {
+                    setFieldValue('password', value);
+                  }}
+                  error={touched.password && errors.password}
+                  secureTextEntry={true}
+                />
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={styles.btn}
+                  disabled={!isValid || !values.email || !values.password}>
+                  <Text style={styles.btnText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </Formik>
+        <TouchableOpacity onPress={() => {}} style={styles.link}>
+          <Text style={styles.linkText}>Register</Text>
+        </TouchableOpacity>
+      </View>
     </AuthLayout>
   );
 }
