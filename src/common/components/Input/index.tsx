@@ -84,16 +84,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  activePasswordBtn: {
-    height: 20,
-    width: 20,
-    backgroundColor: '#121417',
-  },
-  disablePasswordBtn: {
-    height: 20,
-    width: 20,
-    backgroundColor: '#121417',
-  },
+  // activePasswordBtn: {
+  //   height: 20,
+  //   width: 20,
+  //   backgroundColor: '#121417',
+  // },
+  // disablePasswordBtn: {
+  //   height: 20,
+  //   width: 20,
+  //   backgroundColor: '#121417',
+  // },
   input: {
     padding: 0,
     flex: 1,

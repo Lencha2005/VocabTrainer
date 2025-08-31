@@ -3,11 +3,27 @@ import {fonts} from '../../constants/fonts';
 
 export default StyleSheet.create({
   mainWrap: {
-    margin: 16,
-    marginTop: 64,
-    marginBottom: 60,
-    // flex: 1,
+    // margin: 16,
+    // marginTop: 64,
+    // marginBottom: 60,
+    flex: 1,
     justifyContent: 'center',
+  },
+  wrapperLoginForm: {
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: '#ecf0ef',
+    paddingVertical: 32,
+    paddingHorizontal: 16,
+    minHeight: 455,
+  },
+  wrapperRegisterForm: {
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: '#ecf0ef',
+    paddingTop: 32,
+    paddingHorizontal: 16,
+    height: 549,
   },
   title: {
     fontFamily: fonts.MacPawFixelDisplaySemiBold,
@@ -35,6 +51,7 @@ export default StyleSheet.create({
   link: {
     alignItems: 'center',
     marginTop: 16,
+    marginBottom: 60,
   },
   linkText: {
     fontFamily: fonts.MacPawFixelDisplayBold,

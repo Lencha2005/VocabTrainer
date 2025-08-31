@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import {DevSettings, NativeModules, SafeAreaView} from 'react-native';
 import LoginPage from './src/screen/Auth/Login';
+// import RagistrationPage from './src/screen/Auth/Registration';
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -18,6 +19,7 @@ function App(): React.JSX.Element {
   }, []);
   return (
     <SafeAreaView style={{flex: 1}}>
+      {/* <RagistrationPage /> */}
       <LoginPage />
     </SafeAreaView>
   );
