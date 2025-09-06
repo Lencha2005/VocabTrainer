@@ -1,9 +1,16 @@
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
-import {DevSettings, NativeModules, SafeAreaView} from 'react-native';
-import LoginPage from './src/screen/Auth/Login';
-// import RagistrationPage from './src/screen/Auth/Registration';
+import {
+  DevSettings,
+  NativeModules,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import RootNavigation from './src/navigation';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from './src/common/components/Toast/toastConfig';
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -19,10 +26,27 @@ function App(): React.JSX.Element {
   }, []);
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/* <RagistrationPage /> */}
-      <LoginPage />
+      <View style={styles.toastContainer}>
+        <Toast
+          position="top"
+          topOffset={60}
+          config={toastConfig}
+          visibilityTime={3000}
+        />
+      </View>
+      <RootNavigation />
     </SafeAreaView>
   );
 }
 
 export default App;
+
+const styles = StyleSheet.create({
+  toastContainer: {
+    position: 'absolute',
+    zIndex: 9999,
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+});

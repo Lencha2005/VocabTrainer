@@ -6,7 +6,11 @@ import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {LoginSchema} from '../utils/validations';
 import {loginUser} from '../../../api/auth';
-// import AuthHeader from '../components/AuthHeader';
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {ScreenNames} from '../../../constants/screenNames';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {LoggedOutStackType} from '../../../navigation/types';
+import Toast from 'react-native-toast-message';
 
 interface ITouched {
   email: boolean;
@@ -19,6 +23,11 @@ interface ILoginForm {
 }
 
 export default function LoginPage() {
+  const navigation = useNavigation<StackNavigationProp<LoggedOutStackType>>();
+  const navigationToRegister = () => {
+    navigation.navigate(ScreenNames.REGISTRATION_PAGE);
+  };
+
   const [touched, setTouched] = useState<ITouched>({
     email: false,
     password: false,
@@ -28,14 +37,25 @@ export default function LoginPage() {
     try {
       const result = await loginUser(email, password);
       console.log('result: ', result);
+      if (result) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: ScreenNames.LOGGED_IN_STACK}],
+          }),
+        );
+      }
     } catch (e: any) {
-      console.log('e', e);
+      Toast.show({
+        type: 'error',
+        text1: 'Помилка входу',
+        text2: e.response?.data?.message || 'Щось пішло не так',
+      });
     }
   };
 
   return (
     <AuthLayout>
-      {/* <AuthHeader /> */}
       <View style={styles.wrapperLoginForm}>
         <Text style={styles.title}>Login</Text>
         <Text style={styles.text}>
@@ -69,8 +89,10 @@ export default function LoginPage() {
                   onChangeText={value => {
                     setFieldValue('email', value);
                   }}
-                  error={touched.email && errors.email}
                 />
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
                 <Input
                   onFocus={() =>
                     setTouched(prevState => ({...prevState, password: true}))
@@ -80,20 +102,26 @@ export default function LoginPage() {
                   onChangeText={value => {
                     setFieldValue('password', value);
                   }}
-                  error={touched.password && errors.password}
                   secureTextEntry={true}
                 />
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
                 <TouchableOpacity
                   onPress={handleSubmit}
-                  style={styles.btn}
-                  disabled={!isValid || !values.email || !values.password}>
+                  style={[
+                    styles.btn,
+                    !isValid || !values.email.trim() || !values.password.trim()
+                      ? styles.btnDisabled
+                      : {},
+                  ]}>
                   <Text style={styles.btnText}>Login</Text>
                 </TouchableOpacity>
               </View>
             </>
           )}
         </Formik>
-        <TouchableOpacity onPress={() => {}} style={styles.link}>
+        <TouchableOpacity onPress={navigationToRegister} style={styles.link}>
           <Text style={styles.linkText}>Register</Text>
         </TouchableOpacity>
       </View>

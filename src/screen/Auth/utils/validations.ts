@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const RegistrationSchema = () =>
   Yup.object({
-    name: Yup.string().required('Name is required'),
+    name: Yup.string().min(3).required('Name is required'),
     email: Yup.string()
       .required('Email is required')
       .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, 'Invalid email'),
@@ -10,7 +10,7 @@ export const RegistrationSchema = () =>
       .required('Password is required')
       .matches(
         /^(?=.*[a-zA-Z]{6})(?=.*\d)[a-zA-Z\d]{7}$/,
-        'password must contain 1 number and 6 letters',
+        'Password must contain 1 number and 6 letters',
       ),
   });
 
@@ -23,6 +23,6 @@ export const LoginSchema = () =>
       .required('Password is required')
       .matches(
         /^(?=.*[a-zA-Z]{6})(?=.*\d)[a-zA-Z\d]{7}$/,
-        'password must contain 1 number and 6 letters',
+        'Password must contain 1 number and 6 letters',
       ),
   });

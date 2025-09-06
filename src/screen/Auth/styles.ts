@@ -23,7 +23,7 @@ export default StyleSheet.create({
     backgroundColor: '#ecf0ef',
     paddingTop: 32,
     paddingHorizontal: 16,
-    height: 549,
+    minHeight: 549,
   },
   title: {
     fontFamily: fonts.MacPawFixelDisplaySemiBold,
@@ -58,5 +58,14 @@ export default StyleSheet.create({
     fontSize: 16,
     color: 'rgba(18, 20, 23, 0.5)',
     textDecorationLine: 'underline',
+  },
+  btnDisabled: {
+    opacity: 0.5,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: -4,
+    marginLeft: 4,
   },
 });

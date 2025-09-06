@@ -6,7 +6,11 @@ import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {RegistrationSchema} from '../utils/validations';
 import {registerUser} from '../../../api/auth';
-// import AuthHeader from '../components/AuthHeader';
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {LoggedOutStackType} from '../../../navigation/types';
+import {ScreenNames} from '../../../constants/screenNames';
+import Toast from 'react-native-toast-message';
 
 interface ITouched {
   name: boolean;
@@ -20,7 +24,12 @@ interface IRegistrationForm {
   password: string;
 }
 
-export default function RagistrationPage() {
+export default function RegistrationPage() {
+  const navigation = useNavigation<StackNavigationProp<LoggedOutStackType>>();
+  const navigationToLogin = () => {
+    navigation.navigate(ScreenNames.LOGIN_PAGE);
+  };
+
   const [touched, setTouched] = useState<ITouched>({
     name: false,
     email: false,
@@ -31,14 +40,25 @@ export default function RagistrationPage() {
     try {
       const result = await registerUser(name, email, password);
       console.log('result: ', result);
+      if (result) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: ScreenNames.LOGGED_IN_STACK}],
+          }),
+        );
+      }
     } catch (e: any) {
-      console.log('e', e);
+      Toast.show({
+        type: 'error',
+        text1: 'Помилка входу',
+        text2: e.response?.data?.message || 'Щось пішло не так',
+      });
     }
   };
 
   return (
     <AuthLayout>
-      {/* <AuthHeader /> */}
       <View style={styles.wrapperRegisterForm}>
         <Text style={styles.title}>Register</Text>
         <Text style={styles.text}>
@@ -72,8 +92,10 @@ export default function RagistrationPage() {
                   onChangeText={value => {
                     setFieldValue('name', value);
                   }}
-                  error={touched.name && errors.name}
                 />
+                {touched.name && errors.name && (
+                  <Text style={styles.errorText}>{errors.name}</Text>
+                )}
                 <Input
                   onFocus={() =>
                     setTouched(prevState => ({...prevState, email: true}))
@@ -83,8 +105,10 @@ export default function RagistrationPage() {
                   onChangeText={value => {
                     setFieldValue('email', value);
                   }}
-                  error={touched.email && errors.email}
                 />
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
                 <Input
                   onFocus={() =>
                     setTouched(prevState => ({...prevState, password: true}))
@@ -94,25 +118,29 @@ export default function RagistrationPage() {
                   onChangeText={value => {
                     setFieldValue('password', value);
                   }}
-                  error={touched.password && errors.password}
                   secureTextEntry={true}
                 />
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
                 <TouchableOpacity
                   onPress={handleSubmit}
-                  style={styles.btn}
-                  disabled={
+                  style={[
+                    styles.btn,
                     !isValid ||
-                    !values.name ||
-                    !values.email ||
-                    !values.password
-                  }>
+                    !values.name.trim() ||
+                    !values.email.trim() ||
+                    !values.password.trim()
+                      ? styles.btnDisabled
+                      : {},
+                  ]}>
                   <Text style={styles.btnText}>Register</Text>
                 </TouchableOpacity>
               </View>
             </>
           )}
         </Formik>
-        <TouchableOpacity onPress={() => {}} style={styles.link}>
+        <TouchableOpacity onPress={navigationToLogin} style={styles.link}>
           <Text style={styles.linkText}>Login</Text>
         </TouchableOpacity>
       </View>

@@ -852,8 +852,12 @@ PODS:
   - React-Mapbuffer (0.73.11):
     - glog
     - React-debug
-  - react-native-safe-area-context (4.14.1):
+  - react-native-safe-area-context (4.4.1):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - ReactCommon/turbomodule/core
   - react-native-splash-screen (3.3.0):
     - React-Core
   - React-nativeconfig (0.73.11)
@@ -1030,6 +1034,10 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
+  - RNScreens (3.29.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - RNSVG (15.12.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -1089,6 +1097,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1200,6 +1209,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1233,7 +1244,7 @@ SPEC CHECKSUMS:
   React-jsinspector: a98428936fb888cc15d857226a26d9ac0a668a0e
   React-logger: 6e4873d1f9c54cca30f6c91a6617f8c91b75ba4c
   React-Mapbuffer: 57bf49a458398d329dad2bf8bc660e3e35b96989
-  react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
+  react-native-safe-area-context: 41ffdebd233eddeef75576749f0cf153e83a0681
   react-native-splash-screen: 95994222cc95c236bd3cdc59fe45ed5f27969594
   React-nativeconfig: 8fd29a35a3e4e8c37682d976667663d834ba6165
   React-NativeModulesApple: ca2443a68fb8fb66e4d54a01fd23320cc0276423
@@ -1258,10 +1269,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: a03b770a50541a761447cea9c24536047832124d
   RNGestureHandler: 4098d1ee27ae296b910f91804937af7af6d1aeb5
   RNReanimated: 4af3924737f0bcd29c96e7b2973394deb44fdb7e
+  RNScreens: 59f615aa0782077560c8eea46c2daec3a716dba9
   RNSVG: 70d9f7add64092eb33e975b75ee5fa04295318cc
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: a813a6d82538ccba91c54406404e3ed80b48a692
 
-PODFILE CHECKSUM: 65710b18ecf87c2e725aaaae3c8c87a626642e1d
+PODFILE CHECKSUM: 14d14ae346567fe44c21201dfee072913797886e
 
 COCOAPODS: 1.15.2
