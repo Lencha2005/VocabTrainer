@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackNavigation} from '../../navigation/types';
 
-export default function Home() {
+export default function Dictionary() {
   const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
 
   return (

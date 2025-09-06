@@ -1025,7 +1025,7 @@ PODS:
     - React-perflogger (= 0.73.11)
   - RNCAsyncStorage (1.21.0):
     - React-Core
-  - RNGestureHandler (2.14.0):
+  - RNGestureHandler (2.15.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1267,7 +1267,7 @@ SPEC CHECKSUMS:
   React-utils: e8549669b504c18929b2e9aa4d87657e530a91a4
   ReactCommon: 95e8885213aab98c49fd0e24917f07c435c4347d
   RNCAsyncStorage: a03b770a50541a761447cea9c24536047832124d
-  RNGestureHandler: 4098d1ee27ae296b910f91804937af7af6d1aeb5
+  RNGestureHandler: 4fe9dbe20b22c597b3ac3eae5d87876dc6b6fff1
   RNReanimated: 4af3924737f0bcd29c96e7b2973394deb44fdb7e
   RNScreens: 59f615aa0782077560c8eea46c2daec3a716dba9
   RNSVG: 70d9f7add64092eb33e975b75ee5fa04295318cc
