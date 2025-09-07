@@ -3,6 +3,8 @@ import EyeOffIcon from '../icons/EyeOffIcon';
 import BookTab from '../icons/BookTab';
 import RecommendTab from '../icons/RecommendTab';
 import TrainingTab from '../icons/TrainingTab';
+import LogOutIcon from '../icons/LogOutIcon';
+import UserIcon from '../icons/UserIcon';
 
 const BloodImg = require('../icons/png/blood.png');
 const BookImg = require('../icons/png/book.png');
@@ -16,5 +18,7 @@ export {
   IllustrationImg,
   TrainingTab,
   BookTab,
+  LogOutIcon,
   RecommendTab,
+  UserIcon,
 };

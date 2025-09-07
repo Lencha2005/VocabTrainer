@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from './axiosInstance';
 
 export const loginUser = async (email: string, password: string) => {
@@ -18,4 +19,13 @@ export const registerUser = async (
   });
   console.log('response.data: ', response.data);
   return response.data;
+};
+
+export const logoutUser = async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+    console.log('Token removed. User logged out.');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
 };

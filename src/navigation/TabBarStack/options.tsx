@@ -4,6 +4,7 @@ import {BookTab, RecommendTab, TrainingTab} from '../../assets/icons';
 import {ScreenNames} from '../../constants/screenNames';
 import {fonts} from '../../constants/fonts';
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
+import TabHeader from './components/TabHeader';
 
 const getName = (name: string) => {
   switch (name) {
@@ -37,7 +38,7 @@ export default function getTabOptions(route: any): BottomTabNavigationOptions {
       paddingBottom: 5,
     },
     tabBarShowLabel: false,
-    headerShown: false,
+    header: () => <TabHeader />,
     tabBarIcon: ({focused}) => {
       return (
         <View style={{alignItems: 'center', gap: 2}}>

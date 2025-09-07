@@ -6,11 +6,13 @@ import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {RegistrationSchema} from '../utils/validations';
 import {registerUser} from '../../../api/auth';
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {LoggedOutStackType} from '../../../navigation/types';
 import {ScreenNames} from '../../../constants/screenNames';
 import Toast from 'react-native-toast-message';
+import {navigationRef} from '../../../navigation/components/NavigationRef';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ITouched {
   name: boolean;
@@ -40,13 +42,12 @@ export default function RegistrationPage() {
     try {
       const result = await registerUser(name, email, password);
       console.log('result: ', result);
-      if (result) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: ScreenNames.LOGGED_IN_STACK}],
-          }),
-        );
+      if (result && navigationRef.isReady()) {
+        await AsyncStorage.setItem('userName', result.name);
+        navigationRef.reset({
+          index: 1,
+          routes: [{name: ScreenNames.LOGGED_IN_STACK}],
+        });
       }
     } catch (e: any) {
       Toast.show({
