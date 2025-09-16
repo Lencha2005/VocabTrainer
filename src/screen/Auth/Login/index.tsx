@@ -5,14 +5,15 @@ import Input from '../../../common/components/Input';
 import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {LoginSchema} from '../utils/validations';
-import {loginUser} from '../../../api/auth';
+import {loginUser} from '../../../redux/auth/authOperations';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenNames} from '../../../constants/screenNames';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {LoggedOutStackType} from '../../../navigation/types';
 import Toast from 'react-native-toast-message';
 import {navigationRef} from '../../../navigation/components/NavigationRef';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch, useAppSelector} from '../utils/hooks';
+import {selectAuthError} from '../../../redux/auth/authSelectors';
 
 interface ITouched {
   email: boolean;
@@ -25,6 +26,9 @@ interface ILoginForm {
 }
 
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
+  const authError = useAppSelector(selectAuthError);
+
   const navigation = useNavigation<StackNavigationProp<LoggedOutStackType>>();
   const navigationToRegister = () => {
     navigation.navigate(ScreenNames.REGISTRATION_PAGE);
@@ -36,21 +40,21 @@ export default function LoginPage() {
   });
 
   const onLogin = async (email: string, password: string) => {
-    try {
-      const result = await loginUser(email, password);
-      console.log('result: ', result);
-      if (result && navigationRef.isReady()) {
-        await AsyncStorage.setItem('userName', result.name);
+    const result = await dispatch(loginUser({email, password}));
+    console.log('result: ', result);
+
+    if (loginUser.fulfilled.match(result)) {
+      if (navigationRef.isReady()) {
         navigationRef.reset({
           index: 1,
           routes: [{name: ScreenNames.LOGGED_IN_STACK}],
         });
       }
-    } catch (e: any) {
+    } else {
       Toast.show({
         type: 'error',
         text1: 'Помилка входу',
-        text2: e.response?.data?.message || 'Щось пішло не так',
+        text2: authError || 'Щось пішло не так',
       });
     }
   };

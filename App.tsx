@@ -11,6 +11,9 @@ import {
 import RootNavigation from './src/navigation';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from './src/common/components/Toast/toastConfig';
+import {Provider} from 'react-redux';
+import {persistor, store} from './src/redux/store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -25,17 +28,21 @@ function App(): React.JSX.Element {
     // SplashScreen.hide();
   }, []);
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.toastContainer}>
-        <Toast
-          position="top"
-          topOffset={60}
-          config={toastConfig}
-          visibilityTime={3000}
-        />
-      </View>
-      <RootNavigation />
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaView style={{flex: 1}}>
+          <View style={styles.toastContainer}>
+            <Toast
+              position="top"
+              topOffset={60}
+              config={toastConfig}
+              visibilityTime={3000}
+            />
+          </View>
+          <RootNavigation />
+        </SafeAreaView>
+      </PersistGate>
+    </Provider>
   );
 }
 

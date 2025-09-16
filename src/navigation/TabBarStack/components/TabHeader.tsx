@@ -1,27 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ScreenNames} from '../../../constants/screenNames';
 import {LogOutIcon, UserIcon} from '../../../assets/icons';
 import {fonts} from '../../../constants/fonts';
-import {logoutUser} from '../../../api/auth';
+import {currentUser, logoutUser} from '../../../redux/auth/authOperations';
 import {navigationRef} from '../../components/NavigationRef';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch, useAppSelector} from '../../../screen/Auth/utils/hooks';
+import {selectUser} from '../../../redux/auth/authSelectors';
 
 export default function TabHeader() {
-  const [name, setName] = useState('');
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
-    const getName = async () => {
-      const userName = await AsyncStorage.getItem('userName');
-      if (userName) setName(userName);
-    };
-
-    getName();
-  }, []);
+    dispatch(currentUser());
+  }, [dispatch]);
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
+      await dispatch(logoutUser());
 
       if (navigationRef.isReady()) {
         navigationRef.reset({
@@ -40,7 +37,7 @@ export default function TabHeader() {
         <View style={styles.wrapUserIcon}>
           <UserIcon />
         </View>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{user?.name}</Text>
       </View>
       <TouchableOpacity style={styles.wrapLogout} onPress={handleLogout}>
         <Text style={styles.logOutText}>Log out</Text>

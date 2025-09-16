@@ -5,14 +5,14 @@ import Input from '../../../common/components/Input';
 import styles from '../styles';
 import {Formik, FormikValues} from 'formik';
 import {RegistrationSchema} from '../utils/validations';
-import {registerUser} from '../../../api/auth';
+import {registerUser} from '../../../redux/auth/authOperations';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {LoggedOutStackType} from '../../../navigation/types';
 import {ScreenNames} from '../../../constants/screenNames';
 import Toast from 'react-native-toast-message';
 import {navigationRef} from '../../../navigation/components/NavigationRef';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch} from '../utils/hooks';
 
 interface ITouched {
   name: boolean;
@@ -27,6 +27,7 @@ interface IRegistrationForm {
 }
 
 export default function RegistrationPage() {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<LoggedOutStackType>>();
   const navigationToLogin = () => {
     navigation.navigate(ScreenNames.LOGIN_PAGE);
@@ -39,21 +40,21 @@ export default function RegistrationPage() {
   });
 
   const onRegister = async (name: string, email: string, password: string) => {
-    try {
-      const result = await registerUser(name, email, password);
-      console.log('result: ', result);
-      if (result && navigationRef.isReady()) {
-        await AsyncStorage.setItem('userName', result.name);
+    const result = await dispatch(registerUser({name, email, password}));
+    console.log('result: ', result);
+
+    if (registerUser.fulfilled.match(result)) {
+      if (navigationRef.isReady()) {
         navigationRef.reset({
           index: 1,
           routes: [{name: ScreenNames.LOGGED_IN_STACK}],
         });
       }
-    } catch (e: any) {
+    } else {
       Toast.show({
         type: 'error',
         text1: 'Помилка входу',
-        text2: e.response?.data?.message || 'Щось пішло не так',
+        text2: result.payload || 'Щось пішло не так',
       });
     }
   };
