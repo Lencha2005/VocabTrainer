@@ -2,13 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../lib/axiosInstance';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {getErrorMessage} from '../utils/getErrorMessage';
-
-interface AuthResponse {
-  token: string;
-  name: string;
-  email: string;
-  id?: string;
-}
+import {AuthResponse} from '../types';
 
 export const registerUser = createAsyncThunk<
   AuthResponse,

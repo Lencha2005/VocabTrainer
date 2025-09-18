@@ -5,6 +5,12 @@ import RecommendTab from '../icons/RecommendTab';
 import TrainingTab from '../icons/TrainingTab';
 import LogOutIcon from '../icons/LogOutIcon';
 import UserIcon from '../icons/UserIcon';
+import ToggleDownIcon from './ToggleDownIcon';
+import SwitchHorizontalIcon from './SwitchHorizontalIcon';
+import SearchIcon from './SearchIcon';
+import PlusIcon from './PlusIcon';
+import UkraineIcon from './UkraineIcon';
+import EnglangIcon from './EnglangIcon';
 
 const BloodImg = require('../icons/png/blood.png');
 const BookImg = require('../icons/png/book.png');
@@ -21,4 +27,10 @@ export {
   LogOutIcon,
   RecommendTab,
   UserIcon,
+  ToggleDownIcon,
+  SearchIcon,
+  SwitchHorizontalIcon,
+  PlusIcon,
+  UkraineIcon,
+  EnglangIcon,
 };
