@@ -24,6 +24,7 @@ interface IInput {
   additionInputStyle?: ViewStyle;
   onFocus?: () => void;
   numberOfLines?: number;
+  icon?: React.ReactNode;
 }
 export default function Input({
   onBlur,
@@ -37,6 +38,7 @@ export default function Input({
   additionInputStyle,
   numberOfLines = 1,
   onFocus,
+  icon,
 }: IInput) {
   const [isPassHidden, setIsPassHidden] = useState(secureTextEntry);
 
@@ -63,6 +65,9 @@ export default function Input({
             {!isPassHidden ? <EyeIcon /> : <EyeOffIcon />}
           </TouchableOpacity>
         )}
+        {!secureTextEntry && icon && (
+          <TouchableOpacity style={styles.icon}>{icon}</TouchableOpacity>
+        )}
       </View>
       {!!error && <Text>{error}</Text>}
     </>
@@ -83,6 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    position: 'relative',
   },
   // activePasswordBtn: {
   //   height: 20,
@@ -98,5 +104,10 @@ const styles = StyleSheet.create({
     padding: 0,
     flex: 1,
     fontFamily: fonts.MacPawFixelDisplayRegular,
+  },
+  icon: {
+    position: 'absolute',
+    top: 12,
+    right: 24,
   },
 });
