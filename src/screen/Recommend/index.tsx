@@ -1,10 +1,22 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useCallback} from 'react';
+// import {View} from 'react-native';
+import SearchBar from '../../common/components/SearchBar';
+import {useAppDispatch} from '../Auth/utils/hooks';
+import {resetRecommendFilters} from '../../redux/filters/recommendFiltersSlice';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function Recommend() {
+  const dispatch = useAppDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(resetRecommendFilters());
+    }, [dispatch]),
+  );
+
   return (
-    <View>
-      <Text>Recommend</Text>
-    </View>
+    // <View>
+    <SearchBar mode={'recommend'} />
+    // </View>
   );
 }
