@@ -11,6 +11,9 @@ import SearchIcon from './SearchIcon';
 import PlusIcon from './PlusIcon';
 import UkraineIcon from './UkraineIcon';
 import EnglangIcon from './EnglangIcon';
+import CloseIcon from './CloseIcon';
+import TrashIcon from './TrashIcon';
+import EditIcon from './EditIcon';
 
 const BloodImg = require('../icons/png/blood.png');
 const BookImg = require('../icons/png/book.png');
@@ -33,4 +36,7 @@ export {
   PlusIcon,
   UkraineIcon,
   EnglangIcon,
+  CloseIcon,
+  TrashIcon,
+  EditIcon,
 };

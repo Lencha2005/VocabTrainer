@@ -1,7 +1,7 @@
 import React from 'react';
 import {Path, Svg} from 'react-native-svg';
 
-export default function PlusIcon(width = 20, height = 20, color = '#85AA9F') {
+export default function PlusIcon({width = 20, height = 20, color = '#85AA9F'}) {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 20 20">
       <Path

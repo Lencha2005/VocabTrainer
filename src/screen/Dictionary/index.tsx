@@ -1,22 +1,44 @@
 import React, {useCallback} from 'react';
-// import {Text, TouchableOpacity} from 'react-native';
-// import {useNavigation} from '@react-navigation/core';
-// import {StackNavigationProp} from '@react-navigation/stack';
-// import {RootStackNavigation} from '../../navigation/types';
-import SearchBar from '../../common/components/SearchBar';
+import SearchBar from '../Recommend/components/SearchBar';
 import {resetDictionaryFilters} from '../../redux/filters/dictionaryFiltersSlice';
-import {useAppDispatch} from '../Auth/utils/hooks';
+import {useAppDispatch, useAppSelector} from '../Auth/utils/hooks';
 import {useFocusEffect} from '@react-navigation/native';
+import WordsTable from '../Recommend/components/WordsTable';
+import {View} from 'react-native';
+import {selectUserWords} from '../../redux/dictionary/dictionarySelectors';
+import {
+  addWordById,
+  deleteWordById,
+  getAllUserWords,
+} from '../../redux/dictionary/dictionaryOperations';
 
 export default function Dictionary() {
   const dispatch = useAppDispatch();
+  const words = useAppSelector(selectUserWords);
 
   useFocusEffect(
     useCallback(() => {
       dispatch(resetDictionaryFilters());
+      dispatch(getAllUserWords());
     }, [dispatch]),
   );
-  // const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
 
-  return <SearchBar mode={'dictionary'} />;
+  const onEdit = (id: string) => {
+    dispatch(addWordById(id));
+  };
+
+  const onDelete = (id: string) => {
+    dispatch(deleteWordById(id));
+  };
+  return (
+    <View>
+      <SearchBar mode={'dictionary'} />
+      <WordsTable
+        words={words}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        variant="dictionary"
+      />
+    </View>
+  );
 }

@@ -3,7 +3,6 @@ import {Animated, StyleSheet} from 'react-native';
 import {Mask, Path, Svg} from 'react-native-svg';
 
 interface Props {
-  // style?: ViewStyle;
   rotated?: boolean;
 }
 

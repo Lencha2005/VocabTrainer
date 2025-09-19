@@ -1,16 +1,16 @@
 import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '../../../screen/Auth/utils/hooks';
+import {useAppDispatch, useAppSelector} from '../../../Auth/utils/hooks';
 import {
   setDictionaryCategory,
   setDictionarySearch,
   setDictionarySubCategory,
-} from '../../../redux/filters/dictionaryFiltersSlice';
+} from '../../../../redux/filters/dictionaryFiltersSlice';
 import {
   setRecommendCategory,
   setRecommendSearch,
   setRecommendSubCategory,
-} from '../../../redux/filters/recommendFiltersSlice';
-import Input from '../Input';
+} from '../../../../redux/filters/recommendFiltersSlice';
+import Input from '../../../../common/components/Input';
 import {
   selectDictionaryCategory,
   selectDictionarySearch,
@@ -18,13 +18,17 @@ import {
   selectRecommendCategory,
   selectRecommendSearch,
   selectRecommendSubCategory,
-} from '../../../redux/filters/filtersSelectors';
-import Select from '../Select';
-import {Platform, StyleSheet, View} from 'react-native';
-import {selectCategories} from '../../../redux/recommend/recommendSelectors';
-import {getCategories} from '../../../redux/recommend/recommendOperations';
-import {SearchIcon} from '../../../assets/icons';
-import {fonts} from '../../../constants/fonts';
+} from '../../../../redux/filters/filtersSelectors';
+import Select from '../../../../common/components/Select';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {selectCategories} from '../../../../redux/recommend/recommendSelectors';
+import {getCategories} from '../../../../redux/recommend/recommendOperations';
+import {
+  PlusIcon,
+  SearchIcon,
+  SwitchHorizontalIcon,
+} from '../../../../assets/icons';
+import {fonts} from '../../../../constants/fonts';
 import {RadioButton} from '../RadioButton';
 
 interface ISearchBar {
@@ -91,7 +95,6 @@ export default function SearchBar({mode}: ISearchBar) {
         additionalContainerStyle={styles.inputContainer}
         additionInputStyle={styles.input}
       />
-
       <Select
         value={category}
         options={categories}
@@ -100,7 +103,7 @@ export default function SearchBar({mode}: ISearchBar) {
       />
 
       {category === 'verb' && (
-        <View style={{flexDirection: 'row', marginTop: 10}}>
+        <View style={styles.radio}>
           <RadioButton
             label="Regular"
             selected={subCategory === 'Regular'}
@@ -113,6 +116,24 @@ export default function SearchBar({mode}: ISearchBar) {
           />
         </View>
       )}
+
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
+        <Text style={styles.text}>To study: </Text>
+        <Text style={styles.subText}>0</Text>
+      </View>
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
+        {mode === 'dictionary' && (
+          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+            <Text style={styles.btnText}>Add word</Text>
+            <PlusIcon />
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.btn} onPress={() => {}}>
+          <Text style={styles.btnText}>Train oneself</Text>
+          <SwitchHorizontalIcon />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -122,6 +143,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     justifyContent: 'center',
+    position: 'relative',
+    marginBottom: 32,
   },
   inputContainer: {
     borderWidth: 1,
@@ -132,6 +155,32 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    fontFamily: fonts.MacPawFixelDisplayMedium,
+    fontSize: 16,
+    color: '#121417',
+  },
+  radio: {
+    position: 'absolute',
+    bottom: 60,
+    left: 16,
+    flexDirection: 'row',
+  },
+  text: {
+    fontFamily: fonts.MacPawFixelDisplayMedium,
+    fontSize: 14,
+    color: 'rgba(18, 20, 23, 0.5)',
+  },
+  subText: {
+    fontFamily: fonts.MacPawFixelDisplayMedium,
+    fontSize: 20,
+    color: '#121417',
+  },
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  btnText: {
     fontFamily: fonts.MacPawFixelDisplayMedium,
     fontSize: 16,
     color: '#121417',
