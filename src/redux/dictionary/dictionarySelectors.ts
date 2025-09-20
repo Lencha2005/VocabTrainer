@@ -1,18 +1,19 @@
 import {RootState} from '../store';
 
-export const selectUserWords = (state: RootState) => state.userWords.userItems;
-export const selectFullUserItems = (state: RootState) =>
-  state.userWords.fullUserItems;
-export const selectWord = (state: RootState) => state.userWords.word;
+export const selectDictionary = (state: RootState) =>
+  state.dictionary.userItems;
+export const selectFullDictionaryItems = (state: RootState) =>
+  state.dictionary.fullUserItems;
+export const selectWord = (state: RootState) => state.dictionary.word;
 export const selectTotalPages = (state: RootState) =>
-  state.userWords.totalPages;
+  state.dictionary.totalPages;
 export const selectCurrentPage = (state: RootState) =>
-  state.userWords.currentPage;
-export const selectPerPages = (state: RootState) => state.userWords.perPage;
+  state.dictionary.currentPage;
+export const selectPerPages = (state: RootState) => state.dictionary.perPage;
 export const selectStatistics = (state: RootState) =>
-  state.userWords.statistics;
-export const selectTasks = (state: RootState) => state.userWords.tasks;
-export const selectAnswers = (state: RootState) => state.userWords.answers;
-export const selectUserWordsLoading = (state: RootState) =>
-  state.userWords.isLoading;
-export const selectErrorUser = (state: RootState) => state.userWords.error;
+  state.dictionary.statistics;
+export const selectTasks = (state: RootState) => state.dictionary.tasks;
+export const selectAnswers = (state: RootState) => state.dictionary.answers;
+export const selectDictionaryLoading = (state: RootState) =>
+  state.dictionary.isLoading;
+export const selectErrorUser = (state: RootState) => state.dictionary.error;

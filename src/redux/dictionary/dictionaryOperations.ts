@@ -17,7 +17,7 @@ export const getUserWordsWithPagination = createAsyncThunk<
   GetWordsResponse,
   GetWordsParams | void,
   {rejectValue: string}
->('userWords/getUserWordsWithPagination', async (params = {}, thunkApi) => {
+>('dictionary/getUserWordsWithPagination', async (params = {}, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<GetWordsResponse>('/words/own', {
       params,
@@ -32,7 +32,7 @@ export const getAllUserWords = createAsyncThunk<
   GetWordsResponse,
   void,
   {rejectValue: string}
->('userWords/getAllUserWords', async (_, thunkApi) => {
+>('dictionary/getAllUserWords', async (_, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<GetWordsResponse>('/words/own', {
       params: {limit: 1000},
@@ -47,7 +47,7 @@ export const addWordById = createAsyncThunk<
   WordItem,
   string,
   {rejectValue: string}
->('userWords/addById', async (id, thunkApi) => {
+>('dictionary/addById', async (id, thunkApi) => {
   try {
     const {data} = await axiosInstance.post<WordItem>(`/words/add/${id}`);
     return data;
@@ -62,7 +62,7 @@ export const updateWordById = createAsyncThunk<
   WordItem,
   {id: string; formData: Omit<WordItem, '_id'>},
   {rejectValue: string}
->('userWords/editById', async ({id, formData}, thunkApi) => {
+>('dictionary/editById', async ({id, formData}, thunkApi) => {
   try {
     const {data} = await axiosInstance.patch<WordItem>(
       `/words/edit/${id}`,
@@ -80,7 +80,7 @@ export const deleteWordById = createAsyncThunk<
   DeleteWordResponse,
   string,
   {rejectValue: string}
->('userWords/deleteById', async (id, thunkApi) => {
+>('dictionary/deleteById', async (id, thunkApi) => {
   try {
     const {data} = await axiosInstance.delete<DeleteWordResponse>(
       `/words/delete/${id}`,
@@ -97,7 +97,7 @@ export const getStatistics = createAsyncThunk<
   StatisticsResponse,
   void,
   {rejectValue: string}
->('userWords/getStatistics', async (_, thunkApi) => {
+>('dictionary/getStatistics', async (_, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<StatisticsResponse>(
       '/words/statistics',
@@ -112,7 +112,7 @@ export const getTasks = createAsyncThunk<
   GetTasksResponse,
   void,
   {rejectValue: string}
->('userWords/getTasks', async (_, thunkApi) => {
+>('dictionary/getTasks', async (_, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<GetTasksResponse>('/words/tasks');
     return data;
@@ -125,7 +125,7 @@ export const addAnswers = createAsyncThunk<
   AnswerResponse[],
   AnswerWordDto[],
   {rejectValue: string}
->('userWords/addAnswers', async (answers, thunkApi) => {
+>('dictionary/addAnswers', async (answers, thunkApi) => {
   try {
     const {data} = await axiosInstance.post<AnswerResponse[]>(
       '/words/answers',

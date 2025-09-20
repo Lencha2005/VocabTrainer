@@ -5,14 +5,30 @@ import {getErrorMessage} from '../utils/getErrorMessage';
 
 export const getAllWords = createAsyncThunk<
   GetWordsResponse,
-  GetWordsParams | void,
-  {rejectValue: string}
->('dictionary/getAll', async (params = {}, thunkApi) => {
+  GetWordsParams,
+  {rejectValue: string; state: any}
+>('recommend/getAll', async (params, thunkApi) => {
   try {
+    const state = thunkApi.getState();
+    const filters = state.recommendFilters; // ✅ правильно
+    const {currentPage} = state.recommend;
+
+    const finalParams: GetWordsParams = {
+      keyword: filters.search || undefined,
+      category: filters.category || undefined,
+      isIrregular:
+        filters.subCategory === 'Irregular'
+          ? true
+          : filters.subCategory === 'Regular'
+          ? false
+          : undefined, // краще ніж null
+      page: currentPage,
+      limit: params.limit,
+    };
+
     const {data} = await axiosInstance.get<GetWordsResponse>('/words/all', {
-      params,
+      params: finalParams,
     });
-    console.log('data: ', data);
     return data;
   } catch (error: unknown) {
     return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -23,7 +39,7 @@ export const createWord = createAsyncThunk<
   WordItem,
   WordItem,
   {rejectValue: string}
->('dictionary/createWord', async (formData: WordItem, thunkApi) => {
+>('recommend/createWord', async (formData: WordItem, thunkApi) => {
   try {
     const {data} = await axiosInstance.post<WordItem>(
       '/words/create',
@@ -39,7 +55,7 @@ export const getCategories = createAsyncThunk<
   string[],
   void,
   {rejectValue: string}
->('dictionary/getCategories', async (_, thunkApi) => {
+>('recommend/getCategories', async (_, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<string[]>('/words/categories');
     console.log('data: ', data);

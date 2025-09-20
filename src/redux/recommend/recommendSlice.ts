@@ -25,8 +25,8 @@ const INITIAL_STATE: RecommendState = {
   error: null,
 };
 
-const dictionarySlice = createSlice({
-  name: 'dictionary',
+const recommendSlice = createSlice({
+  name: 'recommend',
   initialState: INITIAL_STATE,
   reducers: {
     setCurrentPage(state, action: PayloadAction<number>) {
@@ -77,5 +77,5 @@ const dictionarySlice = createSlice({
       .addCase(getCategories.rejected, handleRejected),
 });
 
-export const {setCurrentPage, resetWords} = dictionarySlice.actions;
-export default dictionarySlice.reducer;
+export const {setCurrentPage, resetWords} = recommendSlice.actions;
+export default recommendSlice.reducer;

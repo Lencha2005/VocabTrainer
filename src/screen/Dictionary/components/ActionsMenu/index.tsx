@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Modal,
   View,
@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   TouchableWithoutFeedback,
+  findNodeHandle,
+  UIManager,
 } from 'react-native';
-import {EditIcon, TrashIcon} from '../../../../assets/icons';
+import {EditIcon, MoreIcon, TrashIcon} from '../../../../assets/icons';
 
 type ActionsMenuProps = {
   onEdit: () => void;
@@ -16,15 +18,33 @@ type ActionsMenuProps = {
 
 export function ActionsMenu({onEdit, onDelete}: ActionsMenuProps) {
   const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState({top: 0, left: 0});
+  const triggerRef = useRef<TouchableOpacity>(null);
 
-  const openMenu = () => setVisible(true);
+  // const openMenu = () => setVisible(true);
+  const openMenu = () => {
+    if (triggerRef.current) {
+      const handle = findNodeHandle(triggerRef.current);
+      if (handle) {
+        UIManager.measure(handle, (_x, _y, _w, h, px, py) => {
+          // меню під кнопкою
+          setPosition({top: py + h + 4, left: px - 58});
+          setVisible(true);
+        });
+      }
+    }
+  };
+
   const closeMenu = () => setVisible(false);
 
   return (
     <View>
       {/* кнопка відкриття меню */}
-      <TouchableOpacity onPress={openMenu} style={styles.iconBtn}>
-        <Text style={styles.btnText}>...</Text>
+      <TouchableOpacity
+        ref={triggerRef}
+        onPress={openMenu}
+        style={styles.iconBtn}>
+        <MoreIcon />
       </TouchableOpacity>
 
       {/* меню */}
@@ -37,7 +57,7 @@ export function ActionsMenu({onEdit, onDelete}: ActionsMenuProps) {
           <View style={styles.backdrop} />
         </TouchableWithoutFeedback>
 
-        <View style={styles.menu}>
+        <View style={[styles.menu, {top: position.top, left: position.left}]}>
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
@@ -76,13 +96,11 @@ const styles = StyleSheet.create({
   },
   menu: {
     position: 'absolute',
-    right: 16,
-    top: 80,
     backgroundColor: '#fff',
     borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    shadowColor: '#000',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    shadowColor: 'rgba(18, 20, 23, 0.08)',
     shadowOpacity: 0.1,
     shadowRadius: 8,
     shadowOffset: {width: 0, height: 4},

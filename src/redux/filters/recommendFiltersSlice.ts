@@ -27,6 +27,7 @@ const recommendFiltersSlice = createSlice({
     },
     setRecommendSubCategory(state, action: PayloadAction<string | null>) {
       state.subCategory = action.payload;
+      console.log('state.subCategory: ', state.subCategory);
     },
     resetRecommendFilters(state) {
       state.search = '';

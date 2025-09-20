@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {WordItem} from '../../../../redux/types';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SwitchHorizontalIcon} from '../../../../assets/icons';
@@ -20,12 +20,14 @@ export default function WordsTable({
   onDelete,
   variant = 'dictionary',
 }: WordsTableProps) {
-  const [openModal, setOpenModal] = useState(false);
-
   const renderHeader = () => (
     <View style={styles.headerRow}>
-      <Text style={[styles.headerCell, {flex: 1, marginRight: 10}]}>Word</Text>
-      <Text style={[styles.headerCell, {flex: 2}]}>Translation</Text>
+      <Text style={[styles.headerCell, {width: 80, marginRight: 10}]}>
+        Word
+      </Text>
+      <Text style={[styles.headerCell, {flex: 1, marginRight: 4}]}>
+        Translation
+      </Text>
 
       {variant === 'dictionary' ? (
         <>
@@ -41,43 +43,48 @@ export default function WordsTable({
     </View>
   );
 
-  const renderItem = ({item}: {item: WordItem}) => (
-    <View style={styles.row}>
-      <Text style={[styles.cell, {flex: 1, marginRight: 10}]}>{item.en}</Text>
-      <Text style={[styles.cell, {flex: 2}]}>{item.ua}</Text>
-      {variant === 'dictionary' ? (
-        <>
-          <ProgressBar value={item.progress ?? 0} labelPosition="left" />
-          <View>
-            <TouchableOpacity
-              onPress={() => setOpenModal(true)}
-              style={[styles.addBtn, {width: 50}]}></TouchableOpacity>
-
-            {openModal && onEdit && onDelete && (
-              <ActionsMenu
-                onEdit={() => onEdit(item._id!)}
-                onDelete={() => onDelete(item._id!)}
-              />
-            )}
-          </View>
-        </>
-      ) : (
-        <>
-          <Text style={[styles.cell, {flex: 1}]}>{[item.category]}</Text>
-          <View
-            style={[styles.cell, {flexDirection: 'row', alignItems: 'center'}]}>
-            {onAdd && (
+  const renderItem = ({item}: {item: WordItem}) => {
+    const rowHeight = item.category === 'verb' && item.isIrregular ? 74 : 56;
+    return (
+      <View style={[styles.row, {height: rowHeight ?? 74}]}>
+        <Text style={[styles.cell, {width: 80}]}>{item.en}</Text>
+        <Text style={[styles.cell, {flex: 1}]}>{item.ua}</Text>
+        {variant === 'dictionary' ? (
+          <>
+            <ProgressBar value={item.progress ?? 0} labelPosition="left" />
+            <View>
               <TouchableOpacity
-                onPress={() => onAdd(item._id!)}
-                style={[styles.addBtn, {width: 30}]}>
-                <SwitchHorizontalIcon />
-              </TouchableOpacity>
-            )}
-          </View>
-        </>
-      )}
-    </View>
-  );
+                style={[styles.addBtn, {width: 50}]}></TouchableOpacity>
+
+              {onEdit && onDelete && (
+                <ActionsMenu
+                  onEdit={() => onEdit(item._id!)}
+                  onDelete={() => onDelete(item._id!)}
+                />
+              )}
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={[styles.cell, {flex: 1}]}>{[item.category]}</Text>
+            <View
+              style={[
+                styles.cell,
+                {flexDirection: 'row', alignItems: 'center'},
+              ]}>
+              {onAdd && (
+                <TouchableOpacity
+                  onPress={() => onAdd(item._id!)}
+                  style={[styles.addBtn, {width: 30}]}>
+                  <SwitchHorizontalIcon />
+                </TouchableOpacity>
+              )}
+            </View>
+          </>
+        )}
+      </View>
+    );
+  };
   return (
     <View style={styles.table}>
       {renderHeader()}
@@ -85,7 +92,7 @@ export default function WordsTable({
         data={words}
         keyExtractor={item => item._id!}
         renderItem={renderItem}
-        contentContainerStyle={{paddingBottom: 16}}
+        contentContainerStyle={{paddingBottom: 1}}
       />
     </View>
   );
@@ -111,6 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     color: '#111827',
+    paddingHorizontal: 4,
   },
   row: {
     flexDirection: 'row',
@@ -125,6 +133,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 14,
     color: '#111827',
+    paddingHorizontal: 4,
   },
   addBtn: {
     flexDirection: 'row',
@@ -134,6 +143,5 @@ const styles = StyleSheet.create({
   addBtnText: {
     fontSize: 14,
     color: '#21725E',
-    marginRight: 6,
   },
 });

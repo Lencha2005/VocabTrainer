@@ -46,8 +46,8 @@ const INITIAL_STATE: DictionaryState = {
   error: null,
 };
 
-const userWordsSlice = createSlice({
-  name: 'userWords',
+const dictionarySlice = createSlice({
+  name: 'dictionary',
   initialState: INITIAL_STATE,
   reducers: {
     setCurrentPage(state, action: PayloadAction<number>) {
@@ -165,6 +165,6 @@ const userWordsSlice = createSlice({
       .addCase(addAnswers.rejected, handleRejected),
 });
 
-export const {setCurrentPage, resetWords} = userWordsSlice.actions;
+export const {setCurrentPage, resetWords} = dictionarySlice.actions;
 
-export default userWordsSlice.reducer;
+export default dictionarySlice.reducer;

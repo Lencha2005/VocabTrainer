@@ -14,6 +14,9 @@ import EnglangIcon from './EnglangIcon';
 import CloseIcon from './CloseIcon';
 import TrashIcon from './TrashIcon';
 import EditIcon from './EditIcon';
+import MoreIcon from './MoreIcon';
+import ArrowDoubleIcon from './ArrowDoubleIcon';
+import ArrowIcon from './ArrowIcon';
 
 const BloodImg = require('../icons/png/blood.png');
 const BookImg = require('../icons/png/book.png');
@@ -39,4 +42,7 @@ export {
   CloseIcon,
   TrashIcon,
   EditIcon,
+  MoreIcon,
+  ArrowDoubleIcon,
+  ArrowIcon,
 };

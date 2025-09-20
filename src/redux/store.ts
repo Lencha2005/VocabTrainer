@@ -3,10 +3,10 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {combineReducers} from 'redux';
 import authReducer from './auth/authSlice';
-import dictionarySlice from './recommend/recommendSlice';
-import userWordsSlice from './dictionary/dictionarySlice';
 import dictionaryFiltersSlice from './filters/dictionaryFiltersSlice';
 import recommendFiltersSlice from './filters/recommendFiltersSlice';
+import recommendSlice from './recommend/recommendSlice';
+import dictionarySlice from './dictionary/dictionarySlice';
 
 const persistConfig = {
   key: 'root',
@@ -23,8 +23,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
+    recommend: recommendSlice,
     dictionary: dictionarySlice,
-    userWords: userWordsSlice,
     recommendFilters: recommendFiltersSlice,
     dictionaryFilters: dictionaryFiltersSlice,
   },

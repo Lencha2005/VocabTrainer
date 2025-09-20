@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from '../Auth/utils/hooks';
 import {useFocusEffect} from '@react-navigation/native';
 import WordsTable from '../Recommend/components/WordsTable';
 import {View} from 'react-native';
-import {selectUserWords} from '../../redux/dictionary/dictionarySelectors';
+import {selectDictionary} from '../../redux/dictionary/dictionarySelectors';
 import {
   addWordById,
   deleteWordById,
@@ -14,7 +14,7 @@ import {
 
 export default function Dictionary() {
   const dispatch = useAppDispatch();
-  const words = useAppSelector(selectUserWords);
+  const words = useAppSelector(selectDictionary);
 
   useFocusEffect(
     useCallback(() => {

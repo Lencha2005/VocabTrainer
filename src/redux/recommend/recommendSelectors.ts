@@ -1,13 +1,13 @@
 import {RootState} from '../store';
 
-export const selectWords = (state: RootState) => state.dictionary.items;
+export const selectRecommendWords = (state: RootState) => state.recommend.items;
 export const selectCategories = (state: RootState) =>
-  state.dictionary.categories;
+  state.recommend.categories;
 export const selectTotalPages = (state: RootState) =>
-  state.dictionary.totalPages;
+  state.recommend.totalPages;
 export const selectCurrentPage = (state: RootState) =>
-  state.dictionary.currentPage;
-export const selectPerPages = (state: RootState) => state.dictionary.perPage;
-export const selectDictionaryLoading = (state: RootState) =>
-  state.dictionary.isLoading;
-export const selectErrorUser = (state: RootState) => state.dictionary.error;
+  state.recommend.currentPage;
+export const selectPerPages = (state: RootState) => state.recommend.perPage;
+export const selectRecommendLoading = (state: RootState) =>
+  state.recommend.isLoading;
+export const selectErrorUser = (state: RootState) => state.recommend.error;
