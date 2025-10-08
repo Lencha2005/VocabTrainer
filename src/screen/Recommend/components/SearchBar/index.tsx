@@ -3,21 +3,21 @@ import {useAppDispatch, useAppSelector} from '../../../Auth/utils/hooks';
 import {
   setDictionaryCategory,
   setDictionarySearch,
-  setDictionarySubCategory,
+  setDictionaryIsIrregular,
 } from '../../../../redux/filters/dictionaryFiltersSlice';
 import {
   setRecommendCategory,
   setRecommendSearch,
-  setRecommendSubCategory,
+  setRecommendIsIrregular,
 } from '../../../../redux/filters/recommendFiltersSlice';
 import Input from '../../../../common/components/Input';
 import {
   selectDictionaryCategory,
   selectDictionarySearch,
-  selectDictionarySubCategory,
+  selectDictionaryIsIrregular,
   selectRecommendCategory,
   selectRecommendSearch,
-  selectRecommendSubCategory,
+  selectRecommendIsIrregular,
 } from '../../../../redux/filters/filtersSelectors';
 import Select from '../../../../common/components/Select';
 import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
@@ -66,10 +66,10 @@ export default function SearchBar({mode}: ISearchBar) {
       : selectRecommendCategory(state),
   );
 
-  const subCategory = useAppSelector(state =>
+  const isIrregular = useAppSelector(state =>
     mode === 'dictionary'
-      ? selectDictionarySubCategory(state)
-      : selectRecommendSubCategory(state),
+      ? selectDictionaryIsIrregular(state)
+      : selectRecommendIsIrregular(state),
   );
 
   const setSearch = (value: string) =>
@@ -86,10 +86,12 @@ export default function SearchBar({mode}: ISearchBar) {
   };
 
   const setSub = (value: 'Regular' | 'Irregular' | null) => {
+    const isIrregular =
+      value === null ? null : value === 'Irregular' ? true : false;
     if (mode === 'dictionary') {
-      dispatch(setDictionarySubCategory(value));
+      dispatch(setDictionaryIsIrregular(isIrregular));
     } else {
-      dispatch(setRecommendSubCategory(value));
+      dispatch(setRecommendIsIrregular(isIrregular));
     }
   };
 
@@ -114,12 +116,12 @@ export default function SearchBar({mode}: ISearchBar) {
         <View style={styles.radio}>
           <RadioButton
             label="Regular"
-            selected={subCategory === 'Regular'}
+            selected={isIrregular === false}
             onPress={() => setSub('Regular')}
           />
           <RadioButton
             label="Irregular"
-            selected={subCategory === 'Irregular'}
+            selected={isIrregular === true}
             onPress={() => setSub('Irregular')}
           />
         </View>
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     justifyContent: 'center',
     position: 'relative',
-    marginBottom: 32,
+    marginBottom: 24,
   },
   inputContainer: {
     borderWidth: 1,

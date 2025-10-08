@@ -20,7 +20,6 @@ export const registerUser = createAsyncThunk<
       password,
     });
     await AsyncStorage.setItem('token', data.token);
-    console.log('data: ', data);
     return data;
   } catch (error) {
     return thunkAPI.rejectWithValue(getErrorMessage(error));
@@ -35,7 +34,6 @@ export const loginUser = createAsyncThunk<
   try {
     const {data} = await axiosInstance.post('/users/signin', {email, password});
     await AsyncStorage.setItem('token', data.token);
-    console.log('data: ', data);
     return data;
   } catch (error) {
     return thunkAPI.rejectWithValue(getErrorMessage(error));
@@ -74,7 +72,6 @@ export const logoutUser = createAsyncThunk<void, void, {rejectValue: string}>(
   async (_, thunkAPI) => {
     try {
       await AsyncStorage.removeItem('token');
-      console.log('Token removed. User logged out.');
     } catch (error) {
       return thunkAPI.rejectWithValue(getErrorMessage(error));
     }

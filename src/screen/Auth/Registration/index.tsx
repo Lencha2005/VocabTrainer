@@ -41,7 +41,6 @@ export default function RegistrationPage() {
 
   const onRegister = async (name: string, email: string, password: string) => {
     const result = await dispatch(registerUser({name, email, password}));
-    console.log('result: ', result);
 
     if (registerUser.fulfilled.match(result)) {
       if (navigationRef.isReady()) {

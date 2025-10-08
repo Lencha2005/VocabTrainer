@@ -54,8 +54,8 @@ export interface GetWordsResponse {
 }
 
 export interface GetWordsParams {
-  keyword?: string;
-  category?: string;
+  keyword?: string | null;
+  category?: string | null;
   isIrregular?: boolean | null;
   page?: number;
   limit?: number;

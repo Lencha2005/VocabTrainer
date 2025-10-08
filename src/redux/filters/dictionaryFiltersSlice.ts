@@ -3,13 +3,13 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 interface DictionaryFiltersState {
   search: string;
   category: string | null;
-  subCategory: string | null;
+  isIrregular: boolean | null;
 }
 
 const initialState: DictionaryFiltersState = {
   search: '',
   category: null,
-  subCategory: null,
+  isIrregular: null,
 };
 
 const dictionaryFiltersSlice = createSlice({
@@ -22,16 +22,16 @@ const dictionaryFiltersSlice = createSlice({
     setDictionaryCategory(state, action: PayloadAction<string | null>) {
       state.category = action.payload;
       if (action.payload !== 'Verb') {
-        state.subCategory = null;
+        state.isIrregular = null;
       }
     },
-    setDictionarySubCategory(state, action: PayloadAction<string | null>) {
-      state.subCategory = action.payload;
+    setDictionaryIsIrregular(state, action: PayloadAction<boolean | null>) {
+      state.isIrregular = action.payload;
     },
     resetDictionaryFilters(state) {
       state.search = '';
       state.category = null;
-      state.subCategory = null;
+      state.isIrregular = null;
     },
   },
 });
@@ -39,7 +39,7 @@ const dictionaryFiltersSlice = createSlice({
 export const {
   setDictionarySearch,
   setDictionaryCategory,
-  setDictionarySubCategory,
+  setDictionaryIsIrregular,
   resetDictionaryFilters,
 } = dictionaryFiltersSlice.actions;
 

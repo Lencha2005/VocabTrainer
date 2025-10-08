@@ -16,12 +16,7 @@ export const getAllWords = createAsyncThunk<
     const finalParams: GetWordsParams = {
       keyword: filters.search || undefined,
       category: filters.category || undefined,
-      isIrregular:
-        filters.subCategory === 'Irregular'
-          ? true
-          : filters.subCategory === 'Regular'
-          ? false
-          : undefined, // краще ніж null
+      isIrregular: filters.isIrregular ?? undefined,
       page: currentPage,
       limit: params.limit,
     };

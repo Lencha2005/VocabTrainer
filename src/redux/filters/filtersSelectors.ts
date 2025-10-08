@@ -6,8 +6,8 @@ export const selectDictionarySearch = (state: RootState) =>
 export const selectDictionaryCategory = (state: RootState) =>
   state.dictionaryFilters.category;
 
-export const selectDictionarySubCategory = (state: RootState) =>
-  state.dictionaryFilters.subCategory;
+export const selectDictionaryIsIrregular = (state: RootState) =>
+  state.dictionaryFilters.isIrregular;
 
 export const selectRecommendSearch = (state: RootState) =>
   state.recommendFilters.search;
@@ -15,5 +15,5 @@ export const selectRecommendSearch = (state: RootState) =>
 export const selectRecommendCategory = (state: RootState) =>
   state.recommendFilters.category;
 
-export const selectRecommendSubCategory = (state: RootState) =>
-  state.recommendFilters.subCategory;
+export const selectRecommendIsIrregular = (state: RootState) =>
+  state.recommendFilters.isIrregular;

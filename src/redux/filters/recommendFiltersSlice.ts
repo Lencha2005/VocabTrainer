@@ -3,13 +3,13 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 interface recommendFiltersState {
   search: string;
   category: string | null;
-  subCategory: string | null;
+  isIrregular: boolean | null;
 }
 
 const initialState: recommendFiltersState = {
   search: '',
   category: null,
-  subCategory: null,
+  isIrregular: null,
 };
 
 const recommendFiltersSlice = createSlice({
@@ -22,16 +22,16 @@ const recommendFiltersSlice = createSlice({
     setRecommendCategory(state, action: PayloadAction<string | null>) {
       state.category = action.payload;
       if (action.payload !== 'Verb') {
-        state.subCategory = null;
+        state.isIrregular = null;
       }
     },
-    setRecommendSubCategory(state, action: PayloadAction<string | null>) {
-      state.subCategory = action.payload;
+    setRecommendIsIrregular(state, action: PayloadAction<boolean | null>) {
+      state.isIrregular = action.payload;
     },
     resetRecommendFilters(state) {
       state.search = '';
       state.category = null;
-      state.subCategory = null;
+      state.isIrregular = null;
     },
   },
 });
@@ -39,7 +39,7 @@ const recommendFiltersSlice = createSlice({
 export const {
   setRecommendSearch,
   setRecommendCategory,
-  setRecommendSubCategory,
+  setRecommendIsIrregular,
   resetRecommendFilters,
 } = recommendFiltersSlice.actions;
 

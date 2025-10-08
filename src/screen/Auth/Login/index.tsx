@@ -41,7 +41,6 @@ export default function LoginPage() {
 
   const onLogin = async (email: string, password: string) => {
     const result = await dispatch(loginUser({email, password}));
-    console.log('result: ', result);
 
     if (loginUser.fulfilled.match(result)) {
       if (navigationRef.isReady()) {

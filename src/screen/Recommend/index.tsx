@@ -16,12 +16,13 @@ import WordsPagination from './components/Pagination';
 import {
   selectRecommendCategory,
   selectRecommendSearch,
-  selectRecommendSubCategory,
+  selectRecommendIsIrregular,
 } from '../../redux/filters/filtersSelectors';
 import {
   resetCurrentPage,
   setCurrentPage,
 } from '../../redux/recommend/recommendSlice';
+import Toast from 'react-native-toast-message';
 
 export default function Recommend() {
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ export default function Recommend() {
   const totalPages = useAppSelector(selectTotalPages);
   const search = useAppSelector(selectRecommendSearch);
   const category = useAppSelector(selectRecommendCategory);
-  const subCategory = useAppSelector(selectRecommendSubCategory);
+  const isIrregular = useAppSelector(selectRecommendIsIrregular);
 
   // коли екран у фокусі — скидати фільтри
   useFocusEffect(
@@ -41,7 +42,7 @@ export default function Recommend() {
 
   useEffect(() => {
     dispatch(resetCurrentPage());
-  }, [dispatch, search, category, subCategory]);
+  }, [dispatch, search, category, isIrregular]);
 
   // коли змінюються фільтри або сторінка — фетчити
   useEffect(() => {
@@ -50,13 +51,20 @@ export default function Recommend() {
     // задаємо ліміт залежно від підкатегорії
     const limit = verb ? 4 : 5;
     dispatch(getAllWords({limit}));
-  }, [dispatch, currentPage, search, category, subCategory]);
+  }, [dispatch, currentPage, search, category, isIrregular]);
 
   const onAdd = async (id: string) => {
     try {
-      await dispatch(addWordById(id));
+      await dispatch(addWordById(id)).unwrap();
+      Toast.show({
+        type: 'success',
+        text1: 'Слово додано до словника!',
+      });
     } catch (error) {
-      console.log('error: ', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Слово вже було додано',
+      });
     }
   };
 

@@ -16,7 +16,6 @@ axiosInstance.interceptors.request.use(
       }
       return config;
     } catch (error) {
-      console.log('Axios Interceptor Error:', error);
       return config;
     }
   },

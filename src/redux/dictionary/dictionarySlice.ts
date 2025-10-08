@@ -53,12 +53,12 @@ const dictionarySlice = createSlice({
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
-    resetWords(state) {
-      state.userItems = [];
+    resetCurrentPage(state) {
+      // state.userItems = [];
       state.totalPages = 0;
       state.currentPage = 1;
       state.perPage = 0;
-      state.error = null;
+      // state.error = null;
     },
   },
   extraReducers: builder =>
@@ -165,6 +165,6 @@ const dictionarySlice = createSlice({
       .addCase(addAnswers.rejected, handleRejected),
 });
 
-export const {setCurrentPage, resetWords} = dictionarySlice.actions;
+export const {setCurrentPage, resetCurrentPage} = dictionarySlice.actions;
 
 export default dictionarySlice.reducer;
