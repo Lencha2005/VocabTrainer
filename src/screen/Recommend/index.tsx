@@ -18,7 +18,10 @@ import {
   selectRecommendSearch,
   selectRecommendSubCategory,
 } from '../../redux/filters/filtersSelectors';
-import {setCurrentPage} from '../../redux/recommend/recommendSlice';
+import {
+  resetCurrentPage,
+  setCurrentPage,
+} from '../../redux/recommend/recommendSlice';
 
 export default function Recommend() {
   const dispatch = useAppDispatch();
@@ -28,7 +31,6 @@ export default function Recommend() {
   const search = useAppSelector(selectRecommendSearch);
   const category = useAppSelector(selectRecommendCategory);
   const subCategory = useAppSelector(selectRecommendSubCategory);
-  console.log('words: ', words);
 
   // коли екран у фокусі — скидати фільтри
   useFocusEffect(
@@ -36,6 +38,10 @@ export default function Recommend() {
       dispatch(resetRecommendFilters());
     }, [dispatch]),
   );
+
+  useEffect(() => {
+    dispatch(resetCurrentPage());
+  }, [dispatch, search, category, subCategory]);
 
   // коли змінюються фільтри або сторінка — фетчити
   useEffect(() => {

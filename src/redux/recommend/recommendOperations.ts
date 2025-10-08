@@ -58,7 +58,6 @@ export const getCategories = createAsyncThunk<
 >('recommend/getCategories', async (_, thunkApi) => {
   try {
     const {data} = await axiosInstance.get<string[]>('/words/categories');
-    console.log('data: ', data);
     return data;
   } catch (error: unknown) {
     return thunkApi.rejectWithValue(getErrorMessage(error));

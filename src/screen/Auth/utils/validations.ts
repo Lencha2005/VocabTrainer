@@ -26,3 +26,15 @@ export const LoginSchema = () =>
         'Password must contain 1 number and 6 letters',
       ),
   });
+
+export const EditSchema = Yup.object({
+  ua: Yup.string()
+    .matches(
+      /^(?![A-Za-z])[А-ЯІЄЇҐґа-яієїʼ\s]+$/u,
+      'Введіть слово українською мовою',
+    )
+    .required(),
+  en: Yup.string()
+    .matches(/^[A-Za-z][A-Za-z'\- ]*$/, 'Введіть слово англійською мовою')
+    .required(),
+});

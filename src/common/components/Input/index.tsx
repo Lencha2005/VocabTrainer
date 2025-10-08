@@ -13,7 +13,7 @@ import EyeIcon from '../../../assets/icons/EyeIcon';
 import {EyeOffIcon} from '../../../assets/icons';
 
 interface IInput {
-  onBlur?: () => void;
+  onBlur?: (e: any) => void;
   value: string;
   onChangeText: (text: string) => void;
   placeholderColor?: string;

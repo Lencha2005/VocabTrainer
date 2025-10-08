@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  //   useWindowDimensions,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ArrowDoubleIcon, ArrowIcon} from '../../../../assets/icons';
 
 type WordsPaginationProps = {
@@ -82,13 +76,11 @@ export default function WordsPagination({
       <PaginationArrow
         direction="right"
         disabled={currentPage >= totalPages}
-        // currentPage={currentPage}
         onPress={() => onPageChange(currentPage + 1)}
       />
       <PaginationArrowDouble
         direction="right"
         disabled={currentPage >= totalPages}
-        // totalPages={totalPages}
         onPress={() => onPageChange(totalPages)}
       />
     </View>

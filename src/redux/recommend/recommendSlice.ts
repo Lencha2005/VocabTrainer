@@ -32,12 +32,10 @@ const recommendSlice = createSlice({
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
-    resetWords(state) {
-      state.items = [];
+    resetCurrentPage(state) {
       state.totalPages = 0;
       state.currentPage = 1;
       state.perPage = 0;
-      state.error = null;
     },
   },
   extraReducers: builder =>
@@ -77,5 +75,5 @@ const recommendSlice = createSlice({
       .addCase(getCategories.rejected, handleRejected),
 });
 
-export const {setCurrentPage, resetWords} = recommendSlice.actions;
+export const {setCurrentPage, resetCurrentPage} = recommendSlice.actions;
 export default recommendSlice.reducer;

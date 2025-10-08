@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../Auth/utils/hooks';
 import {
   setDictionaryCategory,
@@ -30,12 +30,21 @@ import {
 } from '../../../../assets/icons';
 import {fonts} from '../../../../constants/fonts';
 import {RadioButton} from '../RadioButton';
+import AddWordModal from '../../../Dictionary/components/AddWordModal';
 
 interface ISearchBar {
   mode: 'dictionary' | 'recommend';
 }
 
 export default function SearchBar({mode}: ISearchBar) {
+  const [modals, setModals] = useState<{
+    editId: string | null;
+    add: boolean;
+  }>({
+    editId: null,
+    add: false,
+  });
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -43,7 +52,6 @@ export default function SearchBar({mode}: ISearchBar) {
   }, [dispatch]);
 
   const categories = useAppSelector(selectCategories);
-  console.log('categories: ', categories);
 
   // вибираємо правильні значення залежно від mode
   const search = useAppSelector(state =>
@@ -124,7 +132,9 @@ export default function SearchBar({mode}: ISearchBar) {
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
         {mode === 'dictionary' && (
-          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => setModals(prev => ({...prev, add: true}))}>
             <Text style={styles.btnText}>Add word</Text>
             <PlusIcon />
           </TouchableOpacity>
@@ -134,6 +144,12 @@ export default function SearchBar({mode}: ISearchBar) {
           <SwitchHorizontalIcon />
         </TouchableOpacity>
       </View>
+      {modals.add && (
+        <AddWordModal
+          visible={modals.add}
+          onClose={() => setModals(prev => ({...prev, add: false}))}
+        />
+      )}
     </View>
   );
 }
