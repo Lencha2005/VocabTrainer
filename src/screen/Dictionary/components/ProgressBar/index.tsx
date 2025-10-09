@@ -28,7 +28,7 @@ export default function ProgressBar({
       style={{
         width: size,
         height: size,
-        paddingRight: 44,
+        paddingRight: 64,
       }}>
       <Svg
         width={size}
