@@ -11,11 +11,17 @@ import {selectUser} from '../../../redux/auth/authSelectors';
 export default function TabHeader() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  // const isLoggedIn = useAppSelector(selectIsLoggedIn);
+
+  // if (!user && !isLoggedIn) {
+  //   return null; // або Loader, або Header з "Loading..."
+  // }
 
   useEffect(() => {
     dispatch(currentUser());
   }, [dispatch]);
 
+  console.log('user: ', user);
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser());

@@ -16,18 +16,16 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  recommend: recommendSlice,
+  dictionary: dictionarySlice,
+  recommendFilters: recommendFiltersSlice,
+  dictionaryFilters: dictionaryFiltersSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: persistedReducer,
-    recommend: recommendSlice,
-    dictionary: dictionarySlice,
-    recommendFilters: recommendFiltersSlice,
-    dictionaryFilters: dictionaryFiltersSlice,
-  },
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({serializableCheck: false}),
 });
