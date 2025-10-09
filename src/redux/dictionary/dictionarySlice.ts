@@ -54,11 +54,9 @@ const dictionarySlice = createSlice({
       state.currentPage = action.payload;
     },
     resetCurrentPage(state) {
-      // state.userItems = [];
       state.totalPages = 0;
       state.currentPage = 1;
       state.perPage = 0;
-      // state.error = null;
     },
   },
   extraReducers: builder =>
@@ -68,20 +66,17 @@ const dictionarySlice = createSlice({
         getUserWordsWithPagination.fulfilled,
         (state, action: PayloadAction<GetWordsResponse>) => {
           state.isLoading = false;
-
-          const newItems = action.payload.results;
-          const oldItems = state.userItems;
-
-          const isSame =
-            oldItems.length === newItems.length &&
-            oldItems.every((item, i) => item._id === newItems[i]._id);
-
-          if (!isSame) {
-            state.userItems = newItems;
+          const newWords = action.payload.results ?? [];
+          if (action.payload.page === 1) {
+            state.userItems = newWords;
+          } else {
+            const existingIds = new Set(state.userItems.map(w => w._id));
+            const unique = newWords.filter(w => !existingIds.has(w._id));
+            state.userItems = [...state.userItems, ...unique];
           }
+
           state.totalPages = action.payload.totalPages;
-          state.currentPage = action.payload.page;
-          state.perPage = action.payload.perPage;
+          state.currentPage = action.payload.page ?? 1;
           state.error = null;
         },
       )

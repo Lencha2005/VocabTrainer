@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import SearchBar from './components/SearchBar';
 import {useAppDispatch, useAppSelector} from '../Auth/utils/hooks';
@@ -12,7 +12,6 @@ import {
   selectTotalPages,
 } from '../../redux/recommend/recommendSelectors';
 import {addWordById} from '../../redux/dictionary/dictionaryOperations';
-import WordsPagination from './components/Pagination';
 import {
   selectRecommendCategory,
   selectRecommendSearch,
@@ -26,6 +25,8 @@ import Toast from 'react-native-toast-message';
 
 export default function Recommend() {
   const dispatch = useAppDispatch();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const words = useAppSelector(selectRecommendWords);
   const currentPage = useAppSelector(selectCurrentPage);
   const totalPages = useAppSelector(selectTotalPages);
@@ -33,25 +34,41 @@ export default function Recommend() {
   const category = useAppSelector(selectRecommendCategory);
   const isIrregular = useAppSelector(selectRecommendIsIrregular);
 
-  // коли екран у фокусі — скидати фільтри
   useFocusEffect(
     useCallback(() => {
       dispatch(resetRecommendFilters());
+      dispatch(resetCurrentPage());
+      dispatch(getAllWords({page: 1, limit: 7}));
     }, [dispatch]),
   );
 
   useEffect(() => {
     dispatch(resetCurrentPage());
+    dispatch(
+      getAllWords({page: 1, limit: 7, keyword: search, category, isIrregular}),
+    );
   }, [dispatch, search, category, isIrregular]);
 
-  // коли змінюються фільтри або сторінка — фетчити
-  useEffect(() => {
-    const verb = category === 'verb';
+  // коли догружаємо
+  const handleLoadMore = async () => {
+    if (isLoadingMore || currentPage >= totalPages) return;
 
-    // задаємо ліміт залежно від підкатегорії
-    const limit = verb ? 4 : 5;
-    dispatch(getAllWords({limit}));
-  }, [dispatch, currentPage, search, category, isIrregular]);
+    setIsLoadingMore(true);
+    const nextPage = currentPage + 1;
+
+    await dispatch(
+      getAllWords({
+        page: nextPage,
+        limit: 7,
+        keyword: search,
+        category,
+        isIrregular,
+      }),
+    ).unwrap();
+
+    dispatch(setCurrentPage(nextPage));
+    setIsLoadingMore(false);
+  };
 
   const onAdd = async (id: string) => {
     try {
@@ -68,18 +85,15 @@ export default function Recommend() {
     }
   };
 
-  const onPageChange = (page: number) => {
-    dispatch(setCurrentPage(page));
-  };
-
   return (
-    <View>
+    <View style={{flex: 1}}>
       <SearchBar mode={'recommend'} />
-      <WordsTable words={words} onAdd={onAdd} variant="recommend" />
-      <WordsPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
+      <WordsTable
+        words={words}
+        onAdd={onAdd}
+        variant="recommend"
+        onEndReached={handleLoadMore}
+        isLoadingMore={isLoadingMore}
       />
     </View>
   );

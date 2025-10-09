@@ -45,7 +45,13 @@ const recommendSlice = createSlice({
         getAllWords.fulfilled,
         (state, action: PayloadAction<GetWordsResponse>) => {
           state.isLoading = false;
-          state.items = action.payload.results;
+          if (state.currentPage === 1) {
+            // якщо це перша сторінка — починаємо заново
+            state.items = action.payload.results;
+          } else {
+            // якщо не перша — додаємо до списку
+            state.items = [...state.items, ...action.payload.results];
+          }
           state.totalPages = action.payload.totalPages;
           state.currentPage = action.payload.page;
           state.perPage = action.payload.perPage;

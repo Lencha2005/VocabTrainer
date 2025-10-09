@@ -9,7 +9,7 @@ export interface WordItem {
   _id?: string;
   en: string;
   ua: string;
-  category?: string;
+  category?: string | null;
   isIrregular?: boolean;
   owner?: string;
   progress?: number;

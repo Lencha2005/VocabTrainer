@@ -11,7 +11,6 @@ import {
   selectTotalPages,
 } from '../../redux/dictionary/dictionarySelectors';
 import {
-  // addWordById,
   deleteWordById,
   getUserWordsWithPagination,
   updateWordById,
@@ -27,12 +26,12 @@ import {
   selectDictionarySearch,
   selectDictionaryIsIrregular,
 } from '../../redux/filters/filtersSelectors';
-import WordsPagination from '../Recommend/components/Pagination';
 
 export default function Dictionary() {
-  const [editWord, setEditWord] = useState<WordItem | null>(null);
-
   const dispatch = useAppDispatch();
+  const [editWord, setEditWord] = useState<WordItem | null>(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const words = useAppSelector(selectDictionary);
   const currentPage = useAppSelector(selectCurrentPage);
   const totalPages = useAppSelector(selectTotalPages);
@@ -44,35 +43,43 @@ export default function Dictionary() {
     useCallback(() => {
       dispatch(resetDictionaryFilters());
       dispatch(resetCurrentPage());
+      dispatch(getUserWordsWithPagination({page: 1, limit: 7}));
     }, [dispatch]),
   );
 
-  // useEffect(() => {
-  //   dispatch(resetCurrentPage());
-  // }, [dispatch, search, category, subCategory]);
-
+  // перше завантаження
   useEffect(() => {
-    const verb = category === 'verb';
-
-    // задаємо ліміт залежно від підкатегорії
-    const limit = verb ? 4 : 5;
+    dispatch(resetCurrentPage());
     dispatch(
       getUserWordsWithPagination({
-        limit,
-        page: currentPage,
+        page: 1,
+        limit: 7,
         keyword: search,
         category,
         isIrregular,
       }),
     );
-  }, [dispatch, currentPage, search, category, isIrregular]);
+  }, [dispatch, search, category, isIrregular]);
 
-  const onPageChange = (page: number) => {
-    dispatch(setCurrentPage(page));
+  // коли догружаємо
+  const handleLoadMore = async () => {
+    if (isLoadingMore || currentPage >= totalPages) return;
+
+    const nextPage = currentPage + 1;
+    setIsLoadingMore(true);
+    dispatch(setCurrentPage(nextPage));
+
+    await dispatch(
+      getUserWordsWithPagination({
+        page: nextPage,
+        limit: 7,
+        keyword: search,
+        category,
+        isIrregular,
+      }),
+    );
+    setIsLoadingMore(false);
   };
-  // const onAdd = (id: string) => {
-  //   dispatch(addWordById(id));
-  // };
 
   const onDelete = (id: string) => {
     dispatch(deleteWordById(id));
@@ -93,7 +100,7 @@ export default function Dictionary() {
       await dispatch(updateWordById(payload));
       await dispatch(
         getUserWordsWithPagination({
-          limit: category === 'verb' ? 4 : 5,
+          limit: 7,
           page: currentPage,
           keyword: search,
           category,
@@ -106,18 +113,15 @@ export default function Dictionary() {
   };
 
   return (
-    <View>
-      <SearchBar mode={'dictionary'} />
+    <View style={{flex: 1}}>
+      <SearchBar mode="dictionary" />
       <WordsTable
         words={words}
         onEdit={onEdit}
         onDelete={onDelete}
         variant="dictionary"
-      />
-      <WordsPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
+        onEndReached={handleLoadMore}
+        isLoadingMore={isLoadingMore}
       />
       <EditWordModal
         visible={!!editWord}

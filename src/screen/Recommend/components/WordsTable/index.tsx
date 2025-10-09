@@ -4,12 +4,15 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SwitchHorizontalIcon} from '../../../../assets/icons';
 import ProgressBar from '../../../Dictionary/components/ProgressBar';
 import {ActionsMenu} from '../../../Dictionary/components/ActionsMenu';
+import ListFooter from '../../../../common/components/ListFooter';
 
 type WordsTableProps = {
   words: WordItem[];
   onAdd?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEndReached?: () => void;
+  isLoadingMore?: boolean;
   variant?: 'dictionary' | 'recommend';
 };
 
@@ -18,6 +21,8 @@ export default function WordsTable({
   onAdd,
   onEdit,
   onDelete,
+  onEndReached,
+  isLoadingMore,
   variant = 'dictionary',
 }: WordsTableProps) {
   const renderHeader = () => (
@@ -93,6 +98,9 @@ export default function WordsTable({
         keyExtractor={item => item._id!}
         renderItem={renderItem}
         contentContainerStyle={{paddingBottom: 1}}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={<ListFooter isLoadingMore={isLoadingMore} />}
       />
     </View>
   );
@@ -100,6 +108,7 @@ export default function WordsTable({
 
 const styles = StyleSheet.create({
   table: {
+    flex: 1,
     borderRadius: 12,
     backgroundColor: '#fff',
     overflow: 'hidden',

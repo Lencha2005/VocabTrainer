@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../Auth/utils/hooks';
 import {
   setDictionaryCategory,
@@ -30,20 +30,21 @@ import {
 } from '../../../../assets/icons';
 import {fonts} from '../../../../constants/fonts';
 import {RadioButton} from '../RadioButton';
-import AddWordModal from '../../../Dictionary/components/AddWordModal';
+// import AddWordModal from '../../../Dictionary/components/AddWordModal';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {LoggedInStackType} from '../../../../navigation/types';
+import {ScreenNames} from '../../../../constants/screenNames';
 
 interface ISearchBar {
   mode: 'dictionary' | 'recommend';
 }
 
 export default function SearchBar({mode}: ISearchBar) {
-  const [modals, setModals] = useState<{
-    editId: string | null;
-    add: boolean;
-  }>({
-    editId: null,
-    add: false,
-  });
+  const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
+  const navigationToAddWord = () => {
+    navigation.navigate(ScreenNames.ADD_WORD_PAGE);
+  };
 
   const dispatch = useAppDispatch();
 
@@ -86,12 +87,11 @@ export default function SearchBar({mode}: ISearchBar) {
   };
 
   const setSub = (value: 'Regular' | 'Irregular' | null) => {
-    const isIrregular =
-      value === null ? null : value === 'Irregular' ? true : false;
+    const sub = value === null ? null : value === 'Irregular' ? true : false;
     if (mode === 'dictionary') {
-      dispatch(setDictionaryIsIrregular(isIrregular));
+      dispatch(setDictionaryIsIrregular(sub));
     } else {
-      dispatch(setRecommendIsIrregular(isIrregular));
+      dispatch(setRecommendIsIrregular(sub));
     }
   };
 
@@ -134,9 +134,7 @@ export default function SearchBar({mode}: ISearchBar) {
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
         {mode === 'dictionary' && (
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => setModals(prev => ({...prev, add: true}))}>
+          <TouchableOpacity style={styles.btn} onPress={navigationToAddWord}>
             <Text style={styles.btnText}>Add word</Text>
             <PlusIcon />
           </TouchableOpacity>
@@ -146,12 +144,6 @@ export default function SearchBar({mode}: ISearchBar) {
           <SwitchHorizontalIcon />
         </TouchableOpacity>
       </View>
-      {modals.add && (
-        <AddWordModal
-          visible={modals.add}
-          onClose={() => setModals(prev => ({...prev, add: false}))}
-        />
-      )}
     </View>
   );
 }
