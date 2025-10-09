@@ -78,11 +78,12 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderWidth: 1,
     borderRadius: 15,
+    borderColor: 'rgba(18, 20, 23, 0.1)',
     marginVertical: 14,
     paddingHorizontal: 18,
     paddingVertical: Platform.select({
       android: 16,
-      ios: 18,
+      ios: 16,
       default: 16,
     }),
     flexDirection: 'row',
@@ -90,16 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
-  // activePasswordBtn: {
-  //   height: 20,
-  //   width: 20,
-  //   backgroundColor: '#121417',
-  // },
-  // disablePasswordBtn: {
-  //   height: 20,
-  //   width: 20,
-  //   backgroundColor: '#121417',
-  // },
   input: {
     padding: 0,
     flex: 1,

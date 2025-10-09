@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     marginBottom: 40,
+    height: 48,
   },
   triggerDisabled: {opacity: 0.6},
   triggerText: {

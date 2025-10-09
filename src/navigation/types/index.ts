@@ -5,6 +5,10 @@ export type LoggedOutStackType = {
 
 export type LoggedInStackType = {
   TAB_BAR_STACK: undefined;
+  ADD_WORD_PAGE?: {
+    page?: number;
+    limit?: number;
+  };
 };
 
 export type TabBarStackType = {
@@ -20,6 +24,7 @@ const LoggedOutStackScreens: LoggedOutStackType = {
 
 const LoggedInStackScreens: LoggedInStackType = {
   TAB_BAR_STACK: undefined,
+  ADD_WORD_PAGE: undefined,
 };
 
 export type RootStackNavigation = {

@@ -14,8 +14,6 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({children}: AuthLayoutProps) {
-  //   const pathname = usePathname();
-  //   const isRegisterPage = pathname === '/register';
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.mainWrap}>
