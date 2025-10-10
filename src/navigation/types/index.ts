@@ -4,7 +4,9 @@ export type LoggedOutStackType = {
 };
 
 export type LoggedInStackType = {
-  TAB_BAR_STACK: undefined;
+  TAB_BAR_STACK: {
+    screen?: keyof TabBarStackType;
+  };
   ADD_WORD_PAGE?: {
     page?: number;
     limit?: number;
@@ -17,17 +19,7 @@ export type TabBarStackType = {
   TRAINING_PAGE: undefined;
 };
 
-const LoggedOutStackScreens: LoggedOutStackType = {
-  LOGIN_PAGE: undefined,
-  REGISTRATION_PAGE: undefined,
-};
-
-const LoggedInStackScreens: LoggedInStackType = {
-  TAB_BAR_STACK: undefined,
-  ADD_WORD_PAGE: undefined,
-};
-
 export type RootStackNavigation = {
-  LOGGED_IN_STACK: {screens: keyof typeof LoggedInStackScreens};
-  LOGGED_OUT_STACK: {screens: keyof typeof LoggedOutStackScreens};
+  LOGGED_IN_STACK: {screens: keyof LoggedInStackType};
+  LOGGED_OUT_STACK: {screens: keyof LoggedOutStackType};
 };

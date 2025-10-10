@@ -21,7 +21,6 @@ export default function TabHeader() {
     dispatch(currentUser());
   }, [dispatch]);
 
-  console.log('user: ', user);
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser());

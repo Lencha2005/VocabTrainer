@@ -56,7 +56,10 @@ export default function WordsTable({
         <Text style={[styles.cell, {flex: 1}]}>{item.ua}</Text>
         {variant === 'dictionary' ? (
           <>
-            <ProgressBar value={item.progress ?? 0} labelPosition="left" />
+            <ProgressBar
+              value={item.progress ?? 0}
+              additionalContainerStyle={styles.progress}
+            />
             <View>
               <TouchableOpacity
                 style={[styles.addBtn, {width: 50}]}></TouchableOpacity>
@@ -152,5 +155,8 @@ const styles = StyleSheet.create({
   addBtnText: {
     fontSize: 14,
     color: '#21725E',
+  },
+  progress: {
+    paddingRight: 64,
   },
 });

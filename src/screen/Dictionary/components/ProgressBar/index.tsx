@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
 
 type ProgressBarProps = {
@@ -10,6 +10,7 @@ type ProgressBarProps = {
   labelPosition?: 'inside' | 'left';
   trackColor?: string;
   progressColor?: string;
+  additionalContainerStyle?: ViewStyle;
 };
 
 export default function ProgressBar({
@@ -18,6 +19,7 @@ export default function ProgressBar({
   thickness = 4,
   trackColor = '#d4f8d3',
   progressColor = '#2bd627',
+  additionalContainerStyle,
 }: ProgressBarProps) {
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -25,11 +27,14 @@ export default function ProgressBar({
 
   const circle = (
     <View
-      style={{
-        width: size,
-        height: size,
-        paddingRight: 64,
-      }}>
+      style={[
+        {
+          width: size,
+          height: size,
+          // paddingRight: 64,
+        },
+        additionalContainerStyle,
+      ]}>
       <Svg
         width={size}
         height={size}
