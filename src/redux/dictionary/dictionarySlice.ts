@@ -11,6 +11,7 @@ import {
 import {
   addAnswers,
   addWordById,
+  createWord,
   deleteWordById,
   getAllUserWords,
   getStatistics,
@@ -102,6 +103,18 @@ const dictionarySlice = createSlice({
         },
       )
       .addCase(addWordById.rejected, handleRejected)
+      .addCase(createWord.pending, handlePending)
+      .addCase(
+        createWord.fulfilled,
+        (state, action: PayloadAction<WordItem>) => {
+          state.isLoading = false;
+          const newWord = action.payload;
+          // додаємо до початку списку
+          state.userItems = [newWord, ...state.userItems];
+          state.error = null;
+        },
+      )
+      .addCase(createWord.rejected, handleRejected)
       .addCase(updateWordById.pending, handlePending)
       .addCase(
         updateWordById.fulfilled,

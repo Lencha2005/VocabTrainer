@@ -38,3 +38,20 @@ export const EditSchema = Yup.object({
     .matches(/^[A-Za-z][A-Za-z'\- ]*$/, 'Введіть слово англійською мовою')
     .required(),
 });
+
+export const TrainingSchema = (direction: 'ua' | 'en') => {
+  const regex =
+    direction === 'ua'
+      ? /^[А-ЯІЇЄҐа-яіїєґʼ\s]+$/u // ✅ українські літери + пробіли + апостроф
+      : /^[A-Za-z,'\-\s]+$/; // ✅ англійські літери, апостроф, дефіс, пробіл
+  return Yup.object({
+    answer: Yup.string()
+      .min(1, 'Введіть переклад')
+      .matches(
+        regex,
+        direction === 'ua'
+          ? 'Введіть українське слово'
+          : 'Введіть англійське слово',
+      ),
+  });
+};

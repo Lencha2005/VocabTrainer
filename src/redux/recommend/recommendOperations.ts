@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {GetWordsParams, GetWordsResponse, WordItem} from '../types';
+import {GetWordsParams, GetWordsResponse} from '../types';
 import axiosInstance from '../lib/axiosInstance';
 import {getErrorMessage} from '../utils/getErrorMessage';
 
@@ -30,21 +30,21 @@ export const getAllWords = createAsyncThunk<
   }
 });
 
-export const createWord = createAsyncThunk<
-  WordItem,
-  WordItem,
-  {rejectValue: string}
->('recommend/createWord', async (formData: WordItem, thunkApi) => {
-  try {
-    const {data} = await axiosInstance.post<WordItem>(
-      '/words/create',
-      formData,
-    );
-    return data;
-  } catch (error: unknown) {
-    return thunkApi.rejectWithValue(getErrorMessage(error));
-  }
-});
+// export const createWord = createAsyncThunk<
+//   WordItem,
+//   WordItem,
+//   {rejectValue: string}
+// >('recommend/createWord', async (formData: WordItem, thunkApi) => {
+//   try {
+//     const {data} = await axiosInstance.post<WordItem>(
+//       '/words/create',
+//       formData,
+//     );
+//     return data;
+//   } catch (error: unknown) {
+//     return thunkApi.rejectWithValue(getErrorMessage(error));
+//   }
+// });
 
 export const getCategories = createAsyncThunk<
   string[],

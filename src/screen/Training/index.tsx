@@ -16,19 +16,28 @@ import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../redux/store';
 import TrainingEmpty from './components/TrainingEmpty';
 import WellDone from './components/WellDone';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {LoggedInStackType} from '../../navigation/types';
 
 export default function Training() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
 
   const [answers, setAnswers] = useState<AnswerWordDto[]>([]);
   const [results, setResults] = useState<AnswerResponse[] | null>(null);
   const [direction, setDirection] = useState<'ua' | 'en' | null>(null);
-  // const [showModal, setShowModal] = useState(false);
+  const [progressPercent, setProgressPercent] = useState(0);
 
   const words = useAppSelector(selectFullDictionaryItems);
   console.log('words: ', words);
   const tasks = useAppSelector(selectTasks);
   console.log('tasks: ', tasks);
+
+  useEffect(() => {
+    dispatch(getAllUserWords());
+    dispatch(getTasks());
+  }, [dispatch]);
 
   useEffect(() => {
     if (direction !== null || tasks.length === 0) return;
@@ -41,13 +50,6 @@ export default function Training() {
     }
   }, [tasks, direction]);
 
-  useEffect(() => {
-    // if (words.length === 0) {
-    dispatch(getAllUserWords());
-    dispatch(getTasks());
-    // }
-  }, [dispatch]);
-
   const progressMap = new Map(
     words.map(word => [word._id, word.progress ?? 0]),
   );
@@ -57,24 +59,46 @@ export default function Training() {
     return progress !== undefined && progress < 100 && task.task === direction;
   });
 
-  const progress = (answers.length / filteredTasks.length) * 100;
+  const totalWords = filteredTasks.length;
+  const passedWords = answers.length;
+
+  // 🔹 Локальний прогрес по сесії
+  useEffect(() => {
+    if (totalWords > 0) {
+      const percent = Math.min(
+        Math.round((passedWords / totalWords) * 100),
+        100,
+      );
+      setProgressPercent(percent);
+    } else {
+      setProgressPercent(0);
+    }
+  }, [totalWords, passedWords]);
+
+  const handleComplete = async (res: AnswerResponse[]) => {
+    setResults(res);
+    await dispatch(getAllUserWords());
+  };
+
+  const handleReturnToDictionary = () => {
+    setResults(null);
+    navigation.navigate('TAB_BAR_STACK', {
+      screen: 'DICTIONARY_PAGE',
+    });
+  };
 
   if (direction === null) return null;
 
-  const handleComplete = (res: AnswerResponse[]) => {
-    setResults(res);
-    // setShowModal(true);
-  };
-
   return (
     <>
-      {filteredTasks.length === 0 ? (
-        <TrainingEmpty />
-      ) : (
+      {totalWords === 0 && !results && <TrainingEmpty />}
+
+      {totalWords > 0 && !results && (
         <View style={styles.wrap}>
           <ProgressBar
-            value={progress}
-            label={`${progress}`}
+            value={progressPercent}
+            label={progressPercent}
+            showLabel={true}
             labelPosition="inside"
             size={44}
             trackColor="#ffffff"
@@ -91,7 +115,9 @@ export default function Training() {
           />
         </View>
       )}
-      {results && <WellDone />}
+      {results && (
+        <WellDone results={results} onReturn={handleReturnToDictionary} />
+      )}
     </>
   );
 }

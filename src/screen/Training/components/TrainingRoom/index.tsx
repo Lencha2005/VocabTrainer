@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import {AnswerResponse, AnswerWordDto, TaskWord} from '../../../../redux/types';
-import {InferType} from 'yup';
-import {EditSchema} from '../../../Auth/utils/validations';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {AppDispatch} from '../../../../redux/store';
@@ -14,6 +12,14 @@ import {
 } from '../../../../assets/icons';
 import Input from '../../../../common/components/Input';
 import {fonts} from '../../../../constants/fonts';
+import {
+  addAnswers,
+  getAllUserWords,
+} from '../../../../redux/dictionary/dictionaryOperations';
+import Toast from 'react-native-toast-message';
+import {TrainingSchema} from '../../../Auth/utils/validations';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {LoggedInStackType} from '../../../../navigation/types';
 
 type TrainingRoomProps = {
   tasks: TaskWord[];
@@ -24,7 +30,9 @@ type TrainingRoomProps = {
   setDirection: React.Dispatch<React.SetStateAction<'ua' | 'en' | null>>;
 };
 
-type WordTaskInputs = InferType<typeof EditSchema>;
+type WordTaskInputs = {
+  answer: string;
+};
 
 export default function TrainingRoom({
   tasks,
@@ -35,9 +43,56 @@ export default function TrainingRoom({
   setDirection,
 }: TrainingRoomProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  const filteredTasks = tasks.filter(task => task.task === direction);
+  const currentTask = filteredTasks[currentIndex];
+
+  if (!currentTask) return null;
+
+  const isUaToEn = direction === 'ua';
+
+  const visibleWord = isUaToEn
+    ? currentTask.en?.toLowerCase()
+    : currentTask.ua?.toLowerCase();
+
+  const handleNext = async (data: WordTaskInputs, resetForm: () => void) => {
+    const userAnswer = data.answer.toLowerCase().trim();
+
+    const answer: AnswerWordDto = {
+      _id: currentTask._id,
+      ua: isUaToEn ? userAnswer : currentTask.ua,
+      en: isUaToEn ? currentTask.en : userAnswer,
+      task: direction,
+    };
+
+    const finalAnswers = [...answers, answer];
+    setAnswers(finalAnswers);
+    resetForm();
+
+    if (currentIndex < tasks.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      try {
+        const result = await dispatch(addAnswers(finalAnswers)).unwrap();
+        await dispatch(getAllUserWords());
+        // await dispatch(getTasks());
+        onComplete(result);
+      } catch {
+        Toast.show({
+          type: 'error',
+          text1: 'Щось пішло не так...',
+        });
+        navigation.goBack();
+      }
+    }
+  };
+
+  //   const key = direction;
+
+  if (!currentTask) return null;
 
   return (
     <>
@@ -56,49 +111,50 @@ export default function TrainingRoom({
 
       <Formik
         initialValues={{
-          ua: '',
-          en: '',
+          answer: '',
         }}
-        validationSchema={EditSchema}
-        onSubmit={() => {}}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
+        validationSchema={TrainingSchema(direction)}
+        onSubmit={(data, {resetForm}) => handleNext(data, resetForm)}>
+        {({handleChange, handleBlur, submitForm, values, errors, touched}) => (
           <>
             <View style={styles.wrapInput}>
               <Input
-                value={values.ua}
-                onChangeText={handleChange('ua')}
-                onBlur={handleBlur('ua')}
+                value={values.answer}
+                onChangeText={handleChange('answer')}
+                onBlur={handleBlur('answer')}
                 additionalContainerStyle={styles.input}
                 placeholder="Введіть переклад"
               />
-              <View style={styles.wrapBottom}>
-                <TouchableOpacity style={styles.btnNext}>
+              {touched.answer && errors.answer && (
+                <Text style={styles.error}>{errors.answer}</Text>
+              )}
+              {currentIndex < filteredTasks.length - 1 && (
+                <TouchableOpacity style={styles.btnNext} onPress={submitForm}>
                   <Text style={styles.btnNextText}>Next</Text>
                   <SwitchHorizontalIcon />
                 </TouchableOpacity>
-                <View style={styles.wrapIcon}>
-                  <UkraineIcon />
+              )}
+              <View style={styles.wrapIcon}>
+                {isUaToEn ? <UkraineIcon /> : <EnglangIcon />}
+                {isUaToEn ? (
                   <Text style={styles.iconText}>Ukrainian</Text>
-                </View>
+                ) : (
+                  <Text style={styles.iconText}>English</Text>
+                )}
               </View>
             </View>
             <View style={styles.wrapTranslate}>
-              <Text style={styles.textTranslate}>Tr</Text>
-              <View style={[styles.wrapIcon, styles.added]}>
-                <EnglangIcon />
-                <Text style={styles.iconText}>English</Text>
+              <Text style={styles.textTranslate}>{visibleWord}</Text>
+              <View style={styles.wrapIcon}>
+                {isUaToEn ? <EnglangIcon /> : <UkraineIcon />}
+                {isUaToEn ? (
+                  <Text style={styles.iconText}>English</Text>
+                ) : (
+                  <Text style={styles.iconText}>Ukrainian</Text>
+                )}
               </View>
             </View>
-            <TouchableOpacity
-              style={styles.btnAdd}
-              onPress={() => handleSubmit()}>
+            <TouchableOpacity style={styles.btnAdd} onPress={submitForm}>
               <Text style={styles.btnText}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -133,11 +189,6 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     marginBottom: 90,
   },
-  wrapBottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   btnNext: {
     flexDirection: 'row',
     gap: 8,
@@ -152,6 +203,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    position: 'absolute',
+    bottom: 22,
+    right: 22,
   },
   iconText: {
     color: '#121417',
@@ -171,11 +225,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.MacPawFixelDisplayMedium,
     fontSize: 16,
   },
-  added: {
-    position: 'absolute',
-    bottom: 22,
-    right: 22,
-  },
   btnAdd: {
     backgroundColor: '#85aa9f',
     padding: 16,
@@ -194,5 +243,10 @@ const styles = StyleSheet.create({
     color: 'rgba(18, 20, 23, 0.5)',
     fontSize: 16,
     fontFamily: fonts.MacPawFixelDisplayBold,
+  },
+  error: {
+    fontFamily: fonts.MacPawFixelDisplayRegular,
+    color: 'red',
+    fontSize: 12,
   },
 });

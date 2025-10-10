@@ -58,6 +58,22 @@ export const addWordById = createAsyncThunk<
   }
 });
 
+export const createWord = createAsyncThunk<
+  WordItem,
+  WordItem,
+  {rejectValue: string}
+>('recommend/createWord', async (formData: WordItem, thunkApi) => {
+  try {
+    const {data} = await axiosInstance.post<WordItem>(
+      '/words/create',
+      formData,
+    );
+    return data;
+  } catch (error: unknown) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+});
+
 export const updateWordById = createAsyncThunk<
   WordItem,
   {id: string; formData: Omit<WordItem, '_id'>},

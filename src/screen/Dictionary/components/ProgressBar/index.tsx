@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, ViewStyle} from 'react-native';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
+import {fonts} from '../../../../constants/fonts';
 
 type ProgressBarProps = {
   value: number; // 0–100
-  label?: string;
+  label?: string | number;
+  showLabel?: boolean;
   size?: number;
   thickness?: number;
   labelPosition?: 'inside' | 'left';
@@ -15,6 +17,8 @@ type ProgressBarProps = {
 
 export default function ProgressBar({
   value,
+  label,
+  showLabel = false,
   size = 24,
   thickness = 4,
   trackColor = '#d4f8d3',
@@ -25,22 +29,14 @@ export default function ProgressBar({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (value / 100) * circumference;
 
-  const circle = (
+  return (
     <View
       style={[
-        {
-          width: size,
-          height: size,
-          // paddingRight: 64,
-        },
+        styles.wrap,
+        {width: size, height: size},
         additionalContainerStyle,
       ]}>
-      <Svg
-        width={size}
-        height={size}
-        style={{
-          transform: [{rotate: '-90deg'}],
-        }}>
+      <Svg width={size} height={size} style={styles.svg}>
         {/* фон */}
         <Circle
           stroke={trackColor}
@@ -63,7 +59,26 @@ export default function ProgressBar({
           strokeLinecap="round"
         />
       </Svg>
+      {showLabel && label !== undefined && (
+        <Text style={[styles.label, {fontSize: size / 2.5}]}>{label}</Text>
+      )}
     </View>
   );
-  return circle;
 }
+
+const styles = StyleSheet.create({
+  wrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  svg: {
+    position: 'absolute',
+    transform: [{rotate: '-90deg'}],
+  },
+  label: {
+    fontFamily: fonts.MacPawFixelDisplayMedium,
+    color: '#121417',
+    textAlign: 'center',
+  },
+});

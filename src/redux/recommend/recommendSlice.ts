@@ -1,6 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {createWord, getAllWords, getCategories} from './recommendOperations';
-import {WordItem, RecommendState, GetWordsResponse} from '../types';
+import {getAllWords, getCategories} from './recommendOperations';
+import {RecommendState, GetWordsResponse} from '../types';
 
 export const handlePending = (state: RecommendState) => {
   state.isLoading = true;
@@ -59,16 +59,16 @@ const recommendSlice = createSlice({
         },
       )
       .addCase(getAllWords.rejected, handleRejected)
-      .addCase(createWord.pending, handlePending)
-      .addCase(
-        createWord.fulfilled,
-        (state, action: PayloadAction<WordItem>) => {
-          state.isLoading = false;
-          state.items.push(action.payload);
-          state.error = null;
-        },
-      )
-      .addCase(createWord.rejected, handleRejected)
+      // .addCase(createWord.pending, handlePending)
+      // .addCase(
+      //   createWord.fulfilled,
+      //   (state, action: PayloadAction<WordItem>) => {
+      //     state.isLoading = false;
+      //     state.items.push(action.payload);
+      //     state.error = null;
+      //   },
+      // )
+      // .addCase(createWord.rejected, handleRejected)
       .addCase(getCategories.pending, handlePending)
       .addCase(
         getCategories.fulfilled,

@@ -18,7 +18,7 @@ import {
   setRecommendCategory,
   setRecommendIsIrregular,
 } from '../../redux/filters/recommendFiltersSlice';
-import {createWord} from '../../redux/recommend/recommendOperations';
+import {createWord} from '../../redux/dictionary/dictionaryOperations';
 import Toast from 'react-native-toast-message';
 import {getUserWordsWithPagination} from '../../redux/dictionary/dictionaryOperations';
 import {useNavigation} from '@react-navigation/native';
